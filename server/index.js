@@ -16,17 +16,17 @@ const keys = apikeys;
 // Your AccountSID and Auth Token from console.twilio.com
 const twAccountSid = process.env.twAccountSid;
 const twAuthToken = process.env.twAuthToken;
-const twFlowId = 'FWa5b913e0d14362f89eaaadf62a06edb1';
-const twOutgoingPhone = '+16205165018';
+const twFlowId = process.env.twFlowId;
+const twOutgoingPhone = process.env.twOutgoingPhone;
 const recordingFolder = '../client1/dist/recordings';
 
-const myDbHost = 'sql3.freesqldatabase.com';
+const myDbHost = process.env.myDbHost;
 const myDbUser = process.env.myDbUser;
 const myDbPass = process.env.myDbPass;
-const myDbName = 'sql3779092';
+const myDbName = process.env.myDbName;
 
 //https://drive.google.com/drive/folders/1Y2672RR3o1N7aBkrZmSXbyhcvglRHKm5?usp=sharing
-GDRIVE_FOLDER_ID = '1tF16QdMJ_-5Xj9IAaj1VZygcOplEGqOA';
+GDRIVE_FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
 
 var con = mysql.createConnection({
   host: myDbHost,
