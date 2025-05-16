@@ -159,7 +159,8 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
       console.log('Found file:', file.name, file.id);
 
       var localFile = fs.createWriteStream(`${recordingFolder}/` + file.name);
-	file.on("finish", function() {
+
+      localFile.on("finish", function() {
 	console.log("downloaded", file.name);
 	});
 
