@@ -174,7 +174,7 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
     return res.data.files;
   } catch (err) {
     // TODO(developer) - Handle error
-    console.log(`File ${recordingSid} not found`);
+    console.log(err);
 
     return `File ${recordingSid} not found`;
   }
