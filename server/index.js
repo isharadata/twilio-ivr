@@ -148,7 +148,7 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
   const files = [];
   try {
     const res = await service.files.list({
-      q: `name=${recordingSid}.mp3`,
+      q: `name="${recordingSid}.mp3"`,
       fields: 'nextPageToken, files(id, name)',
       spaces: 'drive',
     });
