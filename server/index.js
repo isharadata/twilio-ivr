@@ -36,10 +36,10 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
   if (err) throw err;
-  //console.log("Connected to MySQL!");
+  console.log("Connected to MySQL!");
   con.query(`CREATE DATABASE IF NOT EXISTS ${myDbName}`, function (err, result) {
     if (err) throw err;
-    //console.log("Database created");
+    console.log("Database created");
   });
 });
 
@@ -52,19 +52,19 @@ const db = mysql.createPool({
 
 db.getConnection(function(err) {
   if (err) throw err;
-  //console.log("Connected to DB!");
+  console.log("Connected to DB!");
   var sql = "CREATE TABLE IF NOT EXISTS customers (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, plan VARCHAR(25), cost FLOAT, PRIMARY KEY (id))";
 
   db.query(sql, function (err, result) {
     if (err) throw err;
-    //console.log("Customer Table created");
+    console.log("Customer Table created");
   });
 
   var sql1 = "CREATE TABLE IF NOT EXISTS calls (id INT NOT NULL AUTO_INCREMENT, customerId INT NOT NULL, twilioFlowSid VARCHAR(255), twilioCallSid VARCHAR(255), twilioRecordingSid VARCHAR(255), twilioRecordingUrl VARCHAR(255), startTime DATETIME, duration INT, PRIMARY KEY (id), FOREIGN KEY (customerId) REFERENCES customers(id))";
 
   db.query(sql1, function (err, result) {
     if (err) throw err;
-    //console.log("Calls Table created");
+    console.log("Calls Table created");
   });
 
 });
@@ -102,12 +102,12 @@ const authClient = new google.auth.GoogleAuth({
   scopes: SCOPES,
 });
 
-//console.log(`authclient:${authClient}`);
+console.log(`authclient:${authClient}`);
 
 // Function to upload a file to Google Drive
 async function uploadFile(auth, filePath, folderId) {
-    //console.log(`uploadFile filePath: ${filePath}`);
-    //console.log(`uploadFile folderId: ${folderId}`);
+    console.log(`uploadFile filePath: ${filePath}`);
+    console.log(`uploadFile folderId: ${folderId}`);
 
     const drive = google.drive({ version: 'v3', auth });
 
@@ -128,11 +128,11 @@ async function uploadFile(auth, filePath, folderId) {
             fields: 'id'
         });
 
-        //console.log('File uploaded successfully. File ID:', response.data.id);
+        console.log('File uploaded successfully. File ID:', response.data.id);
         return response.data.id;
     } catch (error) {
 	throw(error);
-        //console.log(`Error uploading file to Google Drive: ${error.message}`);
+        console.log(`Error uploading file to Google Drive: ${error.message}`);
     }
 }
 
@@ -156,11 +156,11 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
     Array.prototype.push.apply(files, res.files);
 
     res.data.files.forEach(function(file) {
-      //console.log('Found file:', file.name, file.id);
+      console.log('Found file:', file.name, file.id);
 
       var file = fs.createWriteStream(`${recordingFolder}/recordings/` + item.title);
 	file.on("finish", function() {
-	//console.log("downloaded", item.title);
+	console.log("downloaded", item.title);
 	});
 
 	// Download file
@@ -174,10 +174,10 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
     return res.data.files;
   } catch (err) {
     // TODO(developer) - Handle error
-    //console.log(`File ${recordingSid} not found`);
+    console.log(`File ${recordingSid} not found`);
   }
 } else {
-   //console.log(`${recordingSid}.mp3 already exists. Skipping download`);
+   console.log(`${recordingSid}.mp3 already exists. Skipping download`);
 }
 }
 
@@ -192,9 +192,9 @@ async function deleteFile(auth, fileId) {
             fileId: fileId
         });
 
-        //console.log('File deleted successfully.');
+        console.log('File deleted successfully.');
     } catch (error) {
-        //console.log(`Error deleting file from Google Drive: ${error.message}`);
+        console.log(`Error deleting file from Google Drive: ${error.message}`);
     }
 }
 
@@ -218,9 +218,9 @@ async function updateFile(auth, fileId, filePath) {
             media: media
         });
 
-        //console.log('File updated successfully.');
+        console.log('File updated successfully.');
     } catch (error) {
-        //console.log(`Error updating file in Google Drive: ${error.message}`);
+        console.log(`Error updating file in Google Drive: ${error.message}`);
     }
 
 }
@@ -234,20 +234,20 @@ server.post("/register", (req, res) => {
     let sql = "INSERT INTO customers (name, phone, plan, cost) VALUES (?,?,?,?)"
     db.query(sql, [name, phone, plan, cost], (err,result) =>{
         if (err) {
-            //console.log(err);
+            console.log(err);
         }else{
-            //console.log(result);
+            console.log(result);
         }
     })
 });
 
 server.get("/customers", (req, res) => {
-//console.log("fetching /customers");
+console.log("fetching /customers");
 
     let sql = "SELECT * FROM customers";
     db.query(sql, (err,result) =>{
         if (err) {
-            //console.log(err);
+            console.log(err);
         }else{
             res.send(result);
         }
@@ -261,9 +261,9 @@ server.get("/calls/:customerId", (req, res) => {
     let sql = "SELECT * FROM calls where customerId = ?";
     db.query(sql, [customerId], (err,result) =>{
         if (err) {
-            //console.log(err);
+            console.log(err);
         }else{
-	    //console.log(result);
+	    console.log(result);
             res.send(result);
         }
     })
@@ -279,7 +279,7 @@ server.put("/edit", (req, res) => {
     let sql = "UPDATE customers SET name = ?, phone = ?, plan = ?, cost = ? WHERE id = ?";
     db.query(sql, [name, phone, plan, cost, id], (err,result) =>{
         if (err) {
-            //console.log(err);
+            console.log(err);
         }else{
 
             res.send(result);
@@ -306,9 +306,9 @@ server.get("/call/:index", (req,res) =>{
 
     db.query(sql, [index], (err,result) =>{
         if (err) {
-            //console.log(err);
+            console.log(err);
         }else{
-	    //console.log(result);
+	    console.log(result);
 
 	    client.studio.v2.flows(twFlowId)
              .executions
@@ -322,15 +322,15 @@ server.get("/call/:index", (req,res) =>{
                  }})
 
              .then(execution => {
-		     //console.log(execution);
+		     console.log(execution);
 
 		    call_query = "INSERT INTO calls (customerId, twilioFlowSid) VALUES (?, ?);";
 	    
 		    db.query(call_query, [index, execution.sid], (err,result) =>{
                 	if (err) {
-	                  //console.log(err);
+	                  console.log(err);
         	        }else{
-                	  //console.log(result);
+                	  console.log(result);
 		        }
 		    });
 	     })
@@ -343,7 +343,7 @@ server.get("/call/:index", (req,res) =>{
 async function twDownloadRecording(recordingSid){
       var success = false;
 
-      //console.log(`Starting download recording: ${recordingSid}`);
+      console.log(`Starting download recording: ${recordingSid}`);
 
       var options = {
         host: 'api.twilio.com',
@@ -363,7 +363,7 @@ async function twDownloadRecording(recordingSid){
         var i = 1;
 
         res1.on('data', function (chunk) {
-	   //console.log(i);
+	   console.log(i);
 	   i += 1;
            mp3data += chunk;
         });
@@ -375,20 +375,20 @@ async function twDownloadRecording(recordingSid){
                 if(err){
                   return console.log(err);
                 }else{
-                  //console.log(`File Saved ${fileName}`);
+                  console.log(`File Saved ${fileName}`);
 
 		  success = true;
                 }
               });
           }catch(err){
-              //console.log(err.message);
+              console.log(err.message);
           }
         });
       });
 
       req1.end();
 
-      //console.log(`End download recording: ${recordingSid}`);
+      console.log(`End download recording: ${recordingSid}`);
 
     return new Promise((resolve) => { 
       setTimeout(() => { 
@@ -404,18 +404,18 @@ server.post("/recording-events", async function(req,res) {
 
     const pData = req.body;
     const flowSid = req.query.flowsid;
-    //console.log(`flowsid=${flowSid}`);
+    console.log(`flowsid=${flowSid}`);
 
     // Process the data
-    //console.log('Received POST data:', pData);
+    console.log('Received POST data:', pData);
 
-    //console.log("Downloading Recording mp3 ${pData.RecordingSid}");
+    console.log("Downloading Recording mp3 ${pData.RecordingSid}");
 
     recordingUrl = pData.RecordingUrl;
     recordingSid = pData.RecordingSid;
 
 //    if (fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
-      //console.log('Download completed successfully');
+      console.log('Download completed successfully');
 
       let sql = `UPDATE calls SET twilioCallSid = ?, twilioRecordingSid = ?, twilioRecordingUrl = ?, startTime = STR_TO_DATE(?, '%d-%b-%Y %T'), duration = ? WHERE twilioFlowSId = ?`;
 
@@ -425,30 +425,30 @@ server.post("/recording-events", async function(req,res) {
 
       db.query(sql, [pData.CallSid, pData.RecordingSid, pData.RecordingUrl, pData.RecordingStartTime, pData.RecordingDuration, flowSid], (err,result) =>{
         if (err) {
-            //console.log(err);
+            console.log(err);
         }else{
-	    //console.log(result);
+	    console.log(result);
             res.send(result);
         }
       })
 
       downloadSuccess = await twDownloadRecording(recordingSid);
 
-      //console.log(`downloadSuccess=${downloadSuccess}`);
+      console.log(`downloadSuccess=${downloadSuccess}`);
 
       if(downloadSuccess)
        try{
-	 //console.log(`Starting upload of ${recordingSid}.mp3`);
+	 console.log(`Starting upload of ${recordingSid}.mp3`);
 	  // Upload a file
 	  const uploadedFile = await uploadFile(authClient, `${recordingFolder}/${recordingSid}.mp3`, GDRIVE_FOLDER_ID); // Replace 'GDRIVE_FOLDER_ID_HERE' with the desired folder ID
 	  const fileId = uploadedFile.id;
-	  //console.log(`${recordingSid} uploaded to google. fileId = ${fileId}`);
+	  console.log(`${recordingSid} uploaded to google. fileId = ${fileId}`);
         } catch (error) {
   	  //console.error(error);
         }
 
 	//if(uploadedFile){
-	      //console.log("Delete recording from twilio");
+	      console.log("Delete recording from twilio");
 
 	      client.recordings(recordingSid)
 	        .remove()
@@ -464,7 +464,7 @@ server.post("/recording-events", async function(req,res) {
 server.post("/transcription-events", (req,res) =>{
     const { recording } = req.params
 
-    //console.log(req);
+    console.log(req);
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
@@ -483,15 +483,15 @@ async function listFiles(auth) {
 
         const files = response.data.files;
         if (files.length) {
-            //console.log('Available files:');
+            console.log('Available files:');
             files.forEach(file => {
-                //console.log(`${file.name} (${file.id})`);
+                console.log(`${file.name} (${file.id})`);
             });
         } else {
-            //console.log('No files found.');
+            console.log('No files found.');
         }
     } catch (error) {
-        //console.log(`Error listing files in Google Drive: ${error.message}`);
+        console.log(`Error listing files in Google Drive: ${error.message}`);
     }
 }
 */
@@ -509,12 +509,12 @@ async function listGFiles(auth) {
     });
     const files = response.data.files;
     if (files.length) {
-      //console.log('Files:');
+      console.log('Files:');
       files.forEach((file) => {
-        //console.log(`${file.name} (${file.id})`);
+        console.log(`${file.name} (${file.id})`);
       });
     } else {
-      //console.log('No files found.');
+      console.log('No files found.');
     }
   } catch (error) {
     console.error('Error listing files:', error);
@@ -526,7 +526,7 @@ async function listGFiles(auth) {
 server.get("/list-google-recordings", (res)=>{
     try{
       // List available files
-      //console.log('Available files:');
+      console.log('Available files:');
       listGFiles(authClient);
     } catch(error) {
 	console.error(error);
@@ -543,13 +543,13 @@ server.get("/upload-google-recording/:recordingSid", (req,res)=>{
 	      // Upload a file
 	      const uploadedFile = uploadFile(authClient, recordingPath, GDRIVE_FOLDER_ID); // Replace 'GDRIVE_FOLDER_ID_HERE' with the desired folder ID
 	      const fileId = uploadedFile.id;
-	      //console.log(`Uploaded fileId`);
+	      console.log(`Uploaded fileId`);
 		res.send (`Upload of recording ${recordingSid} successful`);
 	    } catch (error) {
 		console.error(error);
 	    }
 	} else {
-		//console.log("recording not found");
+		console.log("recording not found");
 	}
 });
 
