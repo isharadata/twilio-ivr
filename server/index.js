@@ -444,7 +444,7 @@ server.post("/recording-events", async function(req,res) {
 	  const fileId = uploadedFile.id;
 	  console.log(`${recordingSid} uploaded to google. fileId = ${fileId}`);
         } catch (error) {
-  	  //console.error(error);
+  	  console.error(error);
         }
 
 	//if(uploadedFile){
@@ -452,8 +452,8 @@ server.post("/recording-events", async function(req,res) {
 
 	      client.recordings(recordingSid)
 	        .remove()
-	        .then(() => console.log('')) //(`Recording with SID ${recordingSid} deleted successfully`))
-	        .catch(error => console.error('')); //(`Error deleting recording: ${error.message}`));
+	        .then(() => console.log(`Recording with SID ${recordingSid} deleted successfully`))
+	        .catch(error => console.error(`Error deleting recording: ${error.message}`));
 	//}
 
   } catch (error) {
