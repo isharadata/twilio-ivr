@@ -263,7 +263,7 @@ server.get("/calls/:customerId", (req, res) => {
         if (err) {
             console.log(err);
         }else{
-	    console.log(result);
+	    //console.log(result);
             res.send(result);
         }
     })
@@ -409,7 +409,7 @@ server.post("/recording-events", async function(req,res) {
     // Process the data
     console.log('Received POST data:', pData);
 
-    console.log("Downloading Recording mp3 ${pData.RecordingSid}");
+    console.log(`Downloading Recording mp3 ${pData.RecordingSid}`);
 
     recordingUrl = pData.RecordingUrl;
     recordingSid = pData.RecordingSid;
