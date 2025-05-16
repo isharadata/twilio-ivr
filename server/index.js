@@ -178,7 +178,7 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
 	      return;
 	    }
 	    data
-	      .on("end", () => console.log("Done."))
+	      .on("end", () => console.log(`Done. Saved recording ${recordingFolder}/${recordingSid}.mp3`))
 	      .on("error", (err) => {
 		console.log(err);
 		return process.exit();
