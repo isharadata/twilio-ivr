@@ -173,17 +173,18 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
 	},
 	{responseType: "stream"},
 	(err, {data}) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    data
-      .on("end", () => console.log("Done."))
-      .on("error", (err) => {
-        console.log(err);
-        return process.exit();
-    }
+	    if (err) {
+	      console.log(err);
+	      return;
+	    }
+	    data
+	      .on("end", () => console.log("Done."))
+	      .on("error", (err) => {
+		console.log(err);
+		return process.exit();
+	    })
       ).pipe(localFile);
+	}
     });
 
     return res.data.files;
