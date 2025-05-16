@@ -37,7 +37,7 @@ var con = mysql.createConnection({
 con.connect(function(err) {
   if (err) throw err;
   //console.log("Connected to MySQL!");
-  con.query("CREATE DATABASE IF NOT EXISTS ivr", function (err, result) {
+  con.query(`CREATE DATABASE IF NOT EXISTS ${myDbName}`, function (err, result) {
     if (err) throw err;
     //console.log("Database created");
   });
