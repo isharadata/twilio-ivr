@@ -158,7 +158,7 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
     res.data.files.forEach(function(file) {
       console.log('Found file:', file.name, file.id);
 
-      var localFile = fs.createWriteStream(`${recordingFolder}/recordings/` + file.name);
+      var localFile = fs.createWriteStream(`${recordingFolder}/` + file.name);
 	file.on("finish", function() {
 	console.log("downloaded", file.name);
 	});
