@@ -161,11 +161,11 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
       var localFile = fs.createWriteStream(`${recordingFolder}/` + file.name);
 
       localFile.on("finish", function() {
-	console.log("downloaded", file.name);
-	});
+	console.log("downloading", file.name);
+      });
 
-	// Download file
-	drive.files.get({
+      // Download file
+      service.files.get({
 	auth: auth,
 	fileId: file.id,
 	alt: "media"
