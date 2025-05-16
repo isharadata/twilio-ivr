@@ -183,8 +183,8 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
 		console.log(err);
 		return process.exit();
 	    })
-      ).pipe(localFile);
-	}
+      	    .pipe(localFile);
+	});
     });
 
     return res.data.files;
