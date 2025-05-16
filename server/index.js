@@ -18,7 +18,7 @@ const twAccountSid = process.env.twAccountSid;
 const twAuthToken = process.env.twAuthToken;
 const twFlowId = process.env.twFlowId;
 const twOutgoingPhone = process.env.twOutgoingPhone;
-const recordingFolder = '../client1/dist/recordings';
+const recordingFolder = process.env.recordingFolder;
 
 const myDbHost = process.env.myDbHost;
 const myDbUser = process.env.myDbUser;
