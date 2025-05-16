@@ -1,0 +1,37 @@
+.call-card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 10px;
+    padding: 10px;
+
+    border-style: solid;
+    border-radius: 8px;
+    border-width: 1px;
+}
+
+.actions button{
+    height: 25px;
+    margin-right: 5px;
+    padding-inline: 10px;
+
+    border-style: none;
+    border-radius: 8px;
+    border-color: lightslategrey;
+}
+
+.play{
+    background-color: deepskyblue;
+    color: white;
+}
+
+.download{
+    background-color: crimson;
+    color: white;
+}
+
+.del{
+    background-color: black;
+    color: white;
+}
