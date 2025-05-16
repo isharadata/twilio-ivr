@@ -158,17 +158,17 @@ if (!fs.existsSync(`${recordingFolder}/${recordingSid}.mp3`)) {
     res.data.files.forEach(function(file) {
       console.log('Found file:', file.name, file.id);
 
-      var file = fs.createWriteStream(`${recordingFolder}/recordings/` + item.title);
+      var localFile = fs.createWriteStream(`${recordingFolder}/recordings/` + file.name);
 	file.on("finish", function() {
-	console.log("downloaded", item.title);
+	console.log("downloaded", file.name);
 	});
 
 	// Download file
 	drive.files.get({
-	auth: client,
-	fileId: item.id,
+	auth: auth,
+	fileId: file.id,
 	alt: "media"
-	}).pipe(file);
+	}).pipe(localFile);
       });
 
     return res.data.files;
