@@ -119,7 +119,7 @@ function HomePage() {
 
     const incrementRefreshCustomers = () => {
 	setRefreshCustomers(refreshCustomers + 1, () => {
-      		//console.log('refreshCustomers updated:', refreshCustomers); // This will log the updated count
+      		console.log('refreshCustomers updated:', refreshCustomers); // This will log the updated count
     	});
     }
 
@@ -134,13 +134,13 @@ function HomePage() {
 	    plan: values.plan,
             cost: values.cost,
         }).then((response) =>{
-            //console.log(response)
+            console.log(response)
         });
 
-	//console.log(refreshCustomers);
+	console.log(refreshCustomers);
 	incrementRefreshCustomers();
 	incrementRefreshCustomers();
-	//console.log(refreshCustomers);
+	console.log(refreshCustomers);
     }
 
     useEffect(() => {
@@ -148,7 +148,7 @@ function HomePage() {
 
         //const cancelToken = Axios.cancelToken.source();
 
-        //console.log(`${baseUrl}/customers`);
+        console.log(`${baseUrl}/customers`);
 
 /*        Axios.get(`${baseUrl}/customers`, {
 		headers: {
@@ -165,7 +165,7 @@ function HomePage() {
             .then((response)=>{
 		if(Array.isArray(response.data) && isMounted) {
 	            setCustomers(response.data);
-		    //console.log(response);
+		    console.log(response);
 		} else if (typeof response.data === 'object' && response.data.results) {
 	           setCustomers(response.data.results); // Access array within object
         	} else {
