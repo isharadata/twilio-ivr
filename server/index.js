@@ -18,7 +18,7 @@ const twAccountSid = process.env.twAccountSid;
 const twAuthToken = process.env.twAuthToken;
 const twFlowId = 'FWa5b913e0d14362f89eaaadf62a06edb1';
 const twOutgoingPhone = '+16205165018';
-const recordingFolder = '../client1/dist/public/recordings';
+const recordingFolder = '../client1/dist/recordings';
 
 const myDbHost = 'sql3.freesqldatabase.com';
 const myDbUser = process.env.myDbUser;
