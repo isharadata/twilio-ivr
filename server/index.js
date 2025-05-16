@@ -567,10 +567,13 @@ server.get("/download-google-recording/:recordingSid", (req, res)=>{
     const { recordingSid } = req.params;
 
     try{
-	downloadFile(authClient, recordingSid);
+	res = downloadFile(authClient, recordingSid);
     } catch (error) {
         console.error(error);
+	res = `${recordingSid} not found`;
     }
+
+    return res;
 });
 
 server.get("/download-twilio-recording/:recordingSid", (req, res)=>{
