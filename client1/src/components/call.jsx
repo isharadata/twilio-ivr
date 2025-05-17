@@ -61,7 +61,7 @@ const Call = (props) => {
         <>
         <div className="call-card">
             <div className="info">
-                {props.startTime} {props.duration} {props.recordingSid} <iframe src={recordingSrc} onload="this.style.height=(this.contentWindow.document.body.scrollHeight+20)+'px';this.style.width=(this.contentWindow.document.body.scrollWidth+20)+'px';"></iframe>
+                {props.startTime} {props.duration} <a href={recordingSrc}>{props.recordingSid}</a> <iframe src={recordingSrc} onload="this.style.height=(this.contentWindow.document.body.scrollHeight+2)+'px';this.style.width=(this.contentWindow.document.body.scrollWidth+2)+'px';"></iframe>
             </div>
             <div className="actions">
 
