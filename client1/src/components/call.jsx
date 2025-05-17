@@ -61,9 +61,7 @@ const Call = (props) => {
         <>
         <div className="call-card">
             <div className="info">
-                {props.startTime} {props.duration} {props.recordingSid} <audio controls><source src={recordingSrc} type="audio/mp3" />
-          Your browser does not support the audio element.
-        </audio>
+                {props.startTime} {props.duration} {props.recordingSid} <iframe src=`https://drive.google.com/file/d/${gdriveFileId}/preview` allowfullscreen=""></iframe>
             </div>
             <div className="actions">
 
