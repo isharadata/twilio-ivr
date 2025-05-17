@@ -60,7 +60,7 @@ db.getConnection(function(err) {
     console.log("Customer Table created");
   });
 
-  var sql1 = "CREATE TABLE IF NOT EXISTS calls (id INT NOT NULL AUTO_INCREMENT, customerId INT NOT NULL, twilioFlowSid VARCHAR(255), twilioCallSid VARCHAR(255), twilioRecordingSid VARCHAR(255), twilioRecordingUrl VARCHAR(255), startTime DATETIME, duration INT, PRIMARY KEY (id), FOREIGN KEY (customerId) REFERENCES customers(id))";
+  var sql1 = "CREATE TABLE IF NOT EXISTS calls (id INT NOT NULL AUTO_INCREMENT, customerId INT NOT NULL, twilioFlowSid VARCHAR(255), twilioCallSid VARCHAR(255), twilioRecordingSid VARCHAR(255), twilioRecordingUrl VARCHAR(255), startTime DATETIME, duration INT, gdriveRecordingFileId VARCHAR(50), PRIMARY KEY (id), FOREIGN KEY (customerId) REFERENCES customers(id))";
 
   db.query(sql1, function (err, result) {
     if (err) throw err;
@@ -466,8 +466,22 @@ server.post("/recording-events", async function(req,res) {
        try{
 	 console.log(`Starting upload of ${recordingSid}.mp3`);
 	  // Upload a file
-	  const uploadedFile = await uploadFile(authClient, `${recordingFolder}/${recordingSid}.mp3`, GDRIVE_FOLDER_ID); // Replace 'GDRIVE_FOLDER_ID_HERE' with the desired folder ID
-	  const fileId = uploadedFile.id;
+	  const uploadedFileId = await uploadFile(authClient, `${recordingFolder}/${recordingSid}.mp3`, GDRIVE_FOLDER_ID)
+	       .then(() => {
+		       let sql = `UPDATE calls SET gdriveRecordingFileId = ? WHERE twilioFlowSId = ?`;
+        
+      	  db.query(sql, [uploadedFileId, flowSid], (err,result) =>{
+            if (err) {
+              console.log(err);
+            }else{
+              console.log(result);
+              res.send(result);
+            }
+           })
+	  })
+	  .catch(error => console.error(`${error})`));
+
+	  const fileId = uploadedFileId;
 	  console.log(`${recordingSid} uploaded to google. fileId = ${fileId}`);
         } catch (error) {
   	  console.error(error);

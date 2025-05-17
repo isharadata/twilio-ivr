@@ -85,6 +85,7 @@ function ItemDetailPage() {
                           recordingSid={call.twilioRecordingSid}
 			  startTime={call.startTime}
 			  duration={call.duration}
+			  gdriveId={call.gdriveRecordingFileId}
                       >
                       </Call>;
                   })}
