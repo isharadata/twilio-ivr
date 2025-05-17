@@ -467,8 +467,7 @@ server.post("/recording-events", async function(req,res) {
 	 console.log(`Starting upload of ${recordingSid}.mp3`);
 	  // Upload a file
 	  const uploadedFileId = await uploadFile(authClient, `${recordingFolder}/${recordingSid}.mp3`, GDRIVE_FOLDER_ID)
-	       .then(() => {
-		       let sql = `UPDATE calls SET gdriveRecordingFileId = ? WHERE twilioFlowSId = ?`;
+	  let sql = `UPDATE calls SET gdriveRecordingFileId = ? WHERE twilioFlowSId = ?`;
         
       	  db.query(sql, [uploadedFileId, flowSid], (err,result) =>{
             if (err) {
@@ -478,8 +477,6 @@ server.post("/recording-events", async function(req,res) {
               res.send(result);
             }
            })
-	  })
-	  .catch(error => console.error(`${error})`));
 
 	  const fileId = uploadedFileId;
 	  console.log(`${recordingSid} uploaded to google. fileId = ${fileId}`);
