@@ -330,6 +330,10 @@ server.get("/call/:index", (req,res) =>{
         }else{
 	    console.log(result);
 
+	    //split cost by decimal for twilio voice to correctly articulate
+	    var strCost = result[0].cost;
+	    strCost = strCost.toString().replace('.', ' ');
+
 	    client.studio.v2.flows(twFlowId)
              .executions
              .create({
@@ -340,7 +344,7 @@ server.get("/call/:index", (req,res) =>{
 		   phone: result[0].phone,
 		   address: result[0].address,
 		   plan: result[0].plan,
-		   cost: result[0].cost,
+		   cost: strCost,
                  }})
 
              .then(execution => {
