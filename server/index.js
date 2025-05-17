@@ -338,7 +338,7 @@ server.get("/call/:index", (req,res) =>{
                  parameters: {
                    name: result[0].name,
 		   phone: result[0].phone,
-		   address: result[0].name,
+		   address: result[0].address,
 		   plan: result[0].plan,
 		   cost: result[0].cost,
                  }})
