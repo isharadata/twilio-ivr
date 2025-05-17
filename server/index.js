@@ -250,7 +250,7 @@ server.post("/register", (req, res) => {
     const { plan } = req.body;
     const { cost } = req.body
 
-    let sql = "INSERT INTO customers (name, phone, address, plan, cost) VALUES (?,?,?,?)"
+    let sql = "INSERT INTO customers (name, phone, address, plan, cost) VALUES (?,?,?,?,?)"
     db.query(sql, [name, phone, address, plan, cost], (err,result) =>{
         if (err) {
             console.log(err);
