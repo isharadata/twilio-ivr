@@ -7,9 +7,9 @@ import AppContext from '../AppContext';
 const Call = (props) => {
 
     //const recordingSrc = `/recordings/${props.recordingSid}.mp3`;
-    const recordingPreview = `https://drive.google.com/file/d/${props.gdriveFileId}/edit`;
+    const recordingPreview = `https://drive.google.com/file/d/${props.gdriveFileId}/preview`;
 
-    const recordingSrc = `https://drive.google.com/file/d/${props.gdriveFileId}/preview`;
+    const recordingSrc = `https://drive.google.com/file/d/${props.gdriveFileId}/edit`;
 
     const bUrl = `${window.location.host}`;
 
