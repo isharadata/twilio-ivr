@@ -474,7 +474,6 @@ server.post("/recording-events", async function(req,res) {
               console.log(err);
             }else{
               console.log(result);
-              res.send(result);
             }
            })
 
