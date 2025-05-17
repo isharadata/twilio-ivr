@@ -131,6 +131,7 @@ function HomePage() {
       		},
             name: values.name,
 	    phone: values.phone,
+	    address: values.address,
 	    plan: values.plan,
             cost: values.cost,
         }).then((response) =>{
@@ -193,6 +194,7 @@ function HomePage() {
           <div className="register-box">
               <input className="register-input" type="text" name="name" placeholder="Name" onChange={handleChangeValues} />
               <input className="register-input" type="text" name="phone" placeholder="Phone" onChange={handleChangeValues} />
+              <input className="register-input" type="text" name="address" placeholder="Address" onChange={handleChangeValues} />
               <input className="register-input" type="text" name="plan" placeholder="Plan" onChange={handleChangeValues} />
               <input className="register-input" type="text" name="cost" placeholder="Cost" onChange={handleChangeValues} />
 
@@ -207,6 +209,7 @@ function HomePage() {
                           id={customer.id}
                           name={customer.name}
 			  phone={customer.phone}
+			  address={customer.address}
 			  plan={customer.plan}
                           cost={customer.cost}
 			  incrementRefreshCustomers={incrementRefreshCustomers}

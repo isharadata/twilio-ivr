@@ -53,7 +53,7 @@ const db = mysql.createPool({
 db.getConnection(function(err) {
   if (err) throw err;
   console.log("Connected to DB!");
-  var sql = "CREATE TABLE IF NOT EXISTS customers (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, plan VARCHAR(25), cost FLOAT, PRIMARY KEY (id))";
+  var sql = "CREATE TABLE IF NOT EXISTS customers (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, address VARCHAR(255), plan VARCHAR(25), cost FLOAT, PRIMARY KEY (id))";
 
   db.query(sql, function (err, result) {
     if (err) throw err;
@@ -246,11 +246,12 @@ async function updateFile(auth, fileId, filePath) {
 server.post("/register", (req, res) => {
     const { name } = req.body;
     const { phone } = req.body;
+    const { address } = req.body;
     const { plan } = req.body;
     const { cost } = req.body
 
-    let sql = "INSERT INTO customers (name, phone, plan, cost) VALUES (?,?,?,?)"
-    db.query(sql, [name, phone, plan, cost], (err,result) =>{
+    let sql = "INSERT INTO customers (name, phone, address, plan, cost) VALUES (?,?,?,?)"
+    db.query(sql, [name, phone, address, plan, cost], (err,result) =>{
         if (err) {
             console.log(err);
         }else{
@@ -291,11 +292,12 @@ server.put("/edit", (req, res) => {
     const { id } = req.body;
     const { name } = req.body;
     const { phone } = req.body;
+    const { address } = req.body;
     const { plan } = req.body;
     const { cost } = req.body;
 
-    let sql = "UPDATE customers SET name = ?, phone = ?, plan = ?, cost = ? WHERE id = ?";
-    db.query(sql, [name, phone, plan, cost, id], (err,result) =>{
+    let sql = "UPDATE customers SET name = ?, phone = ?, address = ?, plan = ?, cost = ? WHERE id = ?";
+    db.query(sql, [name, phone, address, plan, cost, id], (err,result) =>{
         if (err) {
             console.log(err);
         }else{
@@ -335,6 +337,8 @@ server.get("/call/:index", (req,res) =>{
                  from: twOutgoingPhone,
                  parameters: {
                    name: result[0].name,
+		   phone: result[0].phone,
+		   address: result[0].name,
 		   plan: result[0].plan,
 		   cost: result[0].cost,
                  }})

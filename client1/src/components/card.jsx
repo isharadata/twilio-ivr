@@ -42,6 +42,7 @@ import AppContext from '../AppContext';
                           id={call.id}
                           name={call.name}
 			  phone={call.phone}
+			  address={call.address}
 			  plan={call.plan}
                           cost={call.cost}
 
@@ -104,10 +105,10 @@ const Card = (props) => {
 
     return (
         <>
-        <FormDialog open={open} setOpen={setOpen} id={props.id} name={props.name} phone={props.phone} plan={props.plan} cost={props.cost} />
+        <FormDialog open={open} setOpen={setOpen} id={props.id} name={props.name} phone={props.phone} address={props.address} plan={props.plan} cost={props.cost} />
         <div className="game-card">
             <div className="info">
-                <h4>{props.name}</h4> {props.phone} {props.plan} ${props.cost}
+                <h4>{props.name}</h4> {props.phone} {props.address} {props.plan} ${props.cost}
             </div>
             <div className="actions">
                 <button className="edit" onClick={cardOpen}>Edit</button>
