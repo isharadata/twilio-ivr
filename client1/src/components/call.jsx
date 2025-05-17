@@ -61,7 +61,7 @@ const Call = (props) => {
         <>
         <div className="call-card">
             <div className="info">
-                {props.startTime} {props.duration} {props.recordingSid} <iframe src=`https://drive.google.com/file/d/${gdriveFileId}/preview` allowfullscreen=""></iframe>
+                {props.startTime} {props.duration} {props.recordingSid} <iframe src={recordingSrc} allowfullscreen=""></iframe>
             </div>
             <div className="actions">
 
