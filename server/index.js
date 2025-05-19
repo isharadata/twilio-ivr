@@ -332,7 +332,7 @@ server.get("/call/:index", (req,res) =>{
 
 	    //split cost by decimal for twilio voice to correctly articulate
 	    var strCost = result[0].cost;
-	    strCost = strCost.toString().replace('.', ' ');
+	    //strCost = strCost.toString().replace('.', ' ');
 
 	    client.studio.v2.flows(twFlowId)
              .executions
