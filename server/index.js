@@ -670,6 +670,7 @@ io.on('connection', function(socket) {
 });
 
 server.post("/twilio-flow-events", (req,res) =>{
+  try{
     console.log(req.body);
     if (req.body[0].type == 'com.twilio.studio.flow.execution.started') {
         req.io.send(JSON.stringify(req.body[0]));
@@ -681,4 +682,7 @@ server.post("/twilio-flow-events", (req,res) =>{
         req.io.send(JSON.stringify(req.body[0]));
         console.log(`${req.body[0].data.execution_sid} - ${req.body[0].data.name} - progress`)
     }
+  } catch (err) {
+    console.log(err);
+  }
 })
