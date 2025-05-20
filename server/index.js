@@ -1,10 +1,12 @@
 const express = require('express');
-const server = express();
 const mysql = require('mysql');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const http = require('http');
+const server = http.createServer(express);
+import { Server } from 'socket.io'
+const io = new Server(server);
 const { google } = require('googleapis');
 
 // Load API credentials from JSON file
@@ -675,7 +677,7 @@ server.listen(3001, () =>
 
 //server.use(express.static('../client/dist')); //serving client side from express
 
-const io = require('socket.io')();
+//const io = require('socket.io')();
 
 io.attach(server);
 
