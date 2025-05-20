@@ -5,7 +5,7 @@ import Card from "./components/card";
 import Call from "./components/call";
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import AppContext from './AppContext';
-import socket.io;
+import io from 'socket.io-client';
 
 var idMap = new Map();
 var executionMap = new Map();

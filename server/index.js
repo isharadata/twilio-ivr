@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const { google } = require('googleapis');
-const { sockServer } = require("socket.io"); // Import Socket.IO Server class
+var io = require('socket.io');
 
 
 // Load API credentials from JSON file
