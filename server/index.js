@@ -6,7 +6,6 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const { google } = require('googleapis');
-const io = require('socket.io')(server);
 
 // Load API credentials from JSON file
 const apikeys = require('./apikeys.json');
@@ -678,5 +677,7 @@ io.on('connection', function(socket) {
 server.listen(3001, () =>
     console.log('') //("Running in the port 3001")
 );
+
+const io = require('socket.io')(server);
 
 //server.use(express.static('../client/dist')); //serving client side from express
