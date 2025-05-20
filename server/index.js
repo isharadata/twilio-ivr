@@ -678,7 +678,7 @@ const nodeServer = server.listen(3001, () =>
 
 //server.use(express.static('../client/dist')); //serving client side from express
 
-const io = io(nodeServer);
+const io = socketIO(nodeServer);
 
 io.on('connection', function(socket) {
     console.log('socket.io connection made');
