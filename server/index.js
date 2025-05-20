@@ -475,13 +475,16 @@ server.post("/recording-events", async function(req,res) {
             if (err) {
               console.log(err);
             }else{
-              oldFName = `${recordingFolder}/${recordingSid}.mp3`;
-              newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
-
-	      fs.renameSync(oldFName, newFName);
-              console.log(`${oldFName} renamed to ${newFName}`);
+	      console.log(result);
             }
            })
+
+          oldFName = `${recordingFolder}/${recordingSid}.mp3`;
+          newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
+
+          console.log(`rename ${oldFName} to ${newFName}`);
+  
+          fs.renameSync(oldFName, newFName);
 
           console.log(`Starting upload of ${newFName}`);
 	  // Upload a file
