@@ -1,5 +1,5 @@
-const app = require("express");
-const server = require("http").createServer(app);
+const express = require("express");
+const server = require("http").createServer(express);
 options = {/**/};
 const io = require("socket.io")(server, options);
 
