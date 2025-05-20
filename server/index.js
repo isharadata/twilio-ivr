@@ -6,8 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const { google } = require('googleapis');
-var io = require('socket.io');
-
+const io = require('socket.io')(server);
 
 // Load API credentials from JSON file
 const apikeys = require('./apikeys.json');
@@ -533,17 +532,6 @@ server.post("/transcription-events", (req,res) =>{
 
 });
 
-io = io(server);
-
-server.use(function(req, res, next) {
-  req.io = io;
-  next();
-});
-
-io.on('connection', function(socket) {
-    console.log('socket.io connection made');
-});
-
 server.post("/twilio-flow-events", (req,res) =>{
     console.log(req.body);
     if (req.body[0].type == 'com.twilio.studio.flow.execution.started') {
@@ -676,16 +664,19 @@ server.get("/download-twilio-recording/:recordingSid", (req, res)=>{
     }
 });
 
+io = io(server);
+
+server.use(function(req, res, next) {
+  req.io = io;
+  next();
+});
+
+io.on('connection', function(socket) {
+    console.log('socket.io connection made');
+});
+
 server.listen(3001, () =>
     console.log('') //("Running in the port 3001")
 );
 
-/*const sport = process.env.PORT || 3000;
-
-server.use(express.static('../client/dist')); //serving client side from express
-
-server.listen(sport, () => console.log(''); //(`Server started on port ${sport}`));
-//Json Middleware
-server.use(express.json());
-server.use(cors());
-*/
+//server.use(express.static('../client/dist')); //serving client side from express
