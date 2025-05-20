@@ -482,7 +482,7 @@ server.post("/recording-events", async function(req,res) {
 
               console.log(`rename ${oldFName} to ${newFName}`);
   
-              fs.renameSync(oldFName, newFName);
+              await fs.rename(oldFName, newFName);
             }
            })
 
@@ -544,6 +544,7 @@ server.post("/twilio-flow-events", (req,res) =>{
     }
 })
 
+/*
 io = io(server);
 app.use(function(req, res, next) {
   req.io = io;
@@ -553,7 +554,7 @@ app.use(function(req, res, next) {
 io.on('connection', function(socket) {
     console.log('socket.io connection made');
 });
-
+*/
 
 
 /*
