@@ -663,21 +663,22 @@ server.get("/download-twilio-recording/:recordingSid", (req, res)=>{
     }
 });
 
-io = io(server);
-
 server.use(function(req, res, next) {
   req.io = io;
   next();
 });
 
-io.on('connection', function(socket) {
-    console.log('socket.io connection made');
-});
 
 server.listen(3001, () =>
     console.log('') //("Running in the port 3001")
 );
 
+//server.use(express.static('../client/dist')); //serving client side from express
+
 const io = require('socket.io')(server);
 
-//server.use(express.static('../client/dist')); //serving client side from express
+io = io(server);
+
+io.on('connection', function(socket) {
+    console.log('socket.io connection made');
+});
