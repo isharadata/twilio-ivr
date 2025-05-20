@@ -465,7 +465,7 @@ server.post("/recording-events", async function(req,res) {
       if(downloadSuccess)
        try{
 
-         var oldFName = `${recordingFolder}/${recordingSId}.mp3`;
+         var oldFName = `${recordingFolder}/${recordingSid}.mp3`;
          var newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
 
 	 //rename the recording
