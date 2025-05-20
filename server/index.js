@@ -675,7 +675,9 @@ server.listen(3001, () =>
 
 //server.use(express.static('../client/dist')); //serving client side from express
 
-const io = require('socket.io')(server);
+const io = require('socket.io')();
+
+io.attach(server);
 
 io.on('connection', function(socket) {
     console.log('socket.io connection made');
