@@ -6,6 +6,8 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const { google } = require('googleapis');
+const { sockServer } = require("socket.io"); // Import Socket.IO Server class
+
 
 // Load API credentials from JSON file
 const apikeys = require('./apikeys.json');
@@ -530,6 +532,16 @@ server.post("/transcription-events", (req,res) =>{
     const client = require('twilio')(twAccountSid, twAuthToken);
 
 })
+
+io = io(server);
+app.use(function(req, res, next) {
+  req.io = io;
+  next();
+});
+
+io.on('connection', function(socket) {
+    console.log('socket.io connection made');
+});
 
 server.post("/twilio-flow-events", (req,res) =>{
     console.log(req.body);

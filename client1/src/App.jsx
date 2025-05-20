@@ -5,6 +5,7 @@ import Card from "./components/card";
 import Call from "./components/call";
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import AppContext from './AppContext';
+import socket.io;
 
 function ItemDetailPage() {
     const bUrl = `${window.location.host}`;
@@ -96,6 +97,8 @@ function ItemDetailPage() {
 }
 
 function HomePage() {
+    const socket = io();
+
     const bUrl = `${window.location.host}`;
 
     var baseUrl = "";
