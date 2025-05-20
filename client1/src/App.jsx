@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import AppContext from './AppContext';
 import io from 'socket.io-client';
 
+const socket = io();
+
 var idMap = new Map();
 var executionMap = new Map();
 
@@ -142,8 +144,6 @@ function ItemDetailPage() {
 }
 
 function HomePage() {
-    const socket = io();
-
     const bUrl = `${window.location.host}`;
 
     var baseUrl = "";
