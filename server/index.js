@@ -531,7 +531,7 @@ server.post("/transcription-events", (req,res) =>{
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
-})io.
+});
 
 io = io(server);
 
