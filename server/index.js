@@ -1,7 +1,12 @@
-const express = require("express");
-const server = require("http").createServer(express);
-options = {/**/};
-const io = require("socket.io")(server, options);
+const exprss = require('express');
+const { createServer } = require('node:http');
+const { join } = require('node:path');
+const { Server } = require('socket.io');
+
+const express = exprss();
+const server = createServer(express);
+const io = new Server(server);
+
 
 const mysql = require('mysql');
 const cors = require('cors');
