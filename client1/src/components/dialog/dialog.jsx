@@ -23,6 +23,7 @@ export default function FormDialog(props) {
         id: props.id,
         name: props.name,
 	phone: props.phone,
+	address: props.address,
 	plan: props.plan,
         cost: props.cost,
     });
@@ -33,6 +34,7 @@ export default function FormDialog(props) {
             id: editValues.id,
             name: editValues.name,
 	    phone: editValues.phone,
+	    address: editValues.address,
 	    plan: editValues.plan,
             cost: editValues.cost,
         });
@@ -87,6 +89,18 @@ export default function FormDialog(props) {
                         fullWidth
                         variant="standard"
                     />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="address"
+                        label="Address" 
+                        defaultValue={props.address}
+                        type="text"
+                        onChange={handleChangeValues}
+                        fullWidth
+                        variant="standard"
+                    />
+
                     <TextField
                         autoFocus
                         margin="dense"
