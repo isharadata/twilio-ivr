@@ -677,8 +677,6 @@ server.listen(3001, () =>
 
 const io = require('socket.io')(server);
 
-io = io(server);
-
 io.on('connection', function(socket) {
     console.log('socket.io connection made');
 });
