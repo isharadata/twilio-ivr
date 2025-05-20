@@ -464,10 +464,25 @@ server.post("/recording-events", async function(req,res) {
 
       if(downloadSuccess)
        try{
+
+	 //rename the recording
+	 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON customers.id = calls.customerId WHERE b.twilioFlowSId = ?`;
+
+          db.query(sql, [flowSid], (err,result) =>{
+            if (err) {
+              console.log(err);
+            }else{
+	      var oldFName = `${recordingFolder}/${recordingSId}.mp3`;
+	      var newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
+	      fs.renameSync(oldFName, newFName);
+              console.log(`${oldFName} renamed to ${newFName}`);
+            }
+           })
+
 	 console.log(`Starting upload of ${recordingSid}.mp3`);
 	  // Upload a file
-	  const uploadedFileId = await uploadFile(authClient, `${recordingFolder}/${recordingSid}.mp3`, GDRIVE_FOLDER_ID)
-	  let sql = `UPDATE calls SET gdriveRecordingFileId = ? WHERE twilioFlowSId = ?`;
+	  const uploadedFileId = await uploadFile(authClient, newFName, GDRIVE_FOLDER_ID)
+	  sql = `UPDATE calls SET gdriveRecordingFileId = ? WHERE twilioFlowSId = ?`;
         
       	  db.query(sql, [uploadedFileId, flowSid], (err,result) =>{
             if (err) {
