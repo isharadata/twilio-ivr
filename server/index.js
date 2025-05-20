@@ -658,7 +658,7 @@ const nodeServer = server.listen(3001, () =>
 
 //server.use(express.static('../client/dist')); //serving client side from express
 
-const io = socketIO(nodeServer);
+const io = socketIO(nodeServer, { cors: { origin: '*' } });
 
 server.use(function(req, res, next) {
   req.io = io;
