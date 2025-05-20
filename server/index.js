@@ -466,7 +466,7 @@ server.post("/recording-events", async function(req,res) {
        try{
 
 	 //rename the recording
-	 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON customers.id = calls.customerId WHERE b.twilioFlowSId = ?`;
+	 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
 
           db.query(sql, [flowSid], (err,result) =>{
             if (err) {
