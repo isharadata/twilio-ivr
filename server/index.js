@@ -1,12 +1,7 @@
-const exprss = require('express');
-const { createServer } = require('node:http');
-const { join } = require('node:path');
-const { Server } = require('socket.io');
+const express = require('express');
+const socketIO = require('socket.io');
 
-const express = exprss();
-const server = createServer(express);
-const io = new Server(server);
-
+const server = express();
 
 const mysql = require('mysql');
 const cors = require('cors');
@@ -677,12 +672,13 @@ server.use(function(req, res, next) {
 });
 
 
-server.listen(3001, () =>
+const nodeServer = server.listen(3001, () =>
     console.log('') //("Running in the port 3001")
 );
 
 //server.use(express.static('../client/dist')); //serving client side from express
 
+const io = io(nodeServer);
 
 io.on('connection', function(socket) {
     console.log('socket.io connection made');
