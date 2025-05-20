@@ -465,8 +465,8 @@ server.post("/recording-events", async function(req,res) {
       if(downloadSuccess)
        try{
 
-         var oldFName = `${recordingFolder}/${recordingSid}.mp3`;
-         var newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
+         var oldFName = '';
+         var newFName = '';
 
 	 //rename the recording
 	 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
@@ -475,6 +475,9 @@ server.post("/recording-events", async function(req,res) {
             if (err) {
               console.log(err);
             }else{
+              oldFName = `${recordingFolder}/${recordingSid}.mp3`;
+              newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
+
 	      fs.renameSync(oldFName, newFName);
               console.log(`${oldFName} renamed to ${newFName}`);
             }
