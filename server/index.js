@@ -476,17 +476,18 @@ server.post("/recording-events", async function(req,res) {
               console.log(err);
             }else{
 	      console.log(result);
+
+              oldFName = `${recordingFolder}/${recordingSid}.mp3`;
+              newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
+
+              console.log(`rename ${oldFName} to ${newFName}`);
+  
+              fs.renameSync(oldFName, newFName);
             }
            })
 
-          oldFName = `${recordingFolder}/${recordingSid}.mp3`;
-          newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
-
-          console.log(`rename ${oldFName} to ${newFName}`);
-  
-          fs.renameSync(oldFName, newFName);
-
           console.log(`Starting upload of ${newFName}`);
+
 	  // Upload a file
 	  const uploadedFileId = await uploadFile(authClient, newFName, GDRIVE_FOLDER_ID)
 	  sql = `UPDATE calls SET gdriveRecordingFileId = ? WHERE twilioFlowSId = ?`;
@@ -522,6 +523,15 @@ server.post("/recording-events", async function(req,res) {
 
 server.post("/transcription-events", (req,res) =>{
     const { recording } = req.params
+
+    console.log(req);
+
+    const client = require('twilio')(twAccountSid, twAuthToken);
+
+})
+
+server.post("/twilio-events", (req,res) =>{
+    //const { event } = req.params
 
     console.log(req);
 
