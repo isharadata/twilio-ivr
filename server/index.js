@@ -1,12 +1,13 @@
-const express = require('express');
+const app = require("express");
+const server = require("http").createServer(app);
+options = {/**/};
+const io = require("socket.io")(server, options);
+
 const mysql = require('mysql');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const http = require('http');
-const server = http.createServer(express);
-import { Server } from 'socket.io'
-const io = new Server(server);
+
 const { google } = require('googleapis');
 
 // Load API credentials from JSON file
@@ -677,9 +678,6 @@ server.listen(3001, () =>
 
 //server.use(express.static('../client/dist')); //serving client side from express
 
-//const io = require('socket.io')();
-
-io.attach(server);
 
 io.on('connection', function(socket) {
     console.log('socket.io connection made');
