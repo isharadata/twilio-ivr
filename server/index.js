@@ -482,9 +482,10 @@ server.post("/recording-events", async function(req,res) {
 
               console.log(`rename ${oldFName} to ${newFName}`);
   
-              await fs.rename(oldFName, newFName);
             }
            })
+
+          await fs.rename(oldFName, newFName);
 
           console.log(`Starting upload of ${newFName}`);
 
