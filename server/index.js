@@ -465,6 +465,9 @@ server.post("/recording-events", async function(req,res) {
       if(downloadSuccess)
        try{
 
+         var oldFName = `${recordingFolder}/${recordingSId}.mp3`;
+         var newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
+
 	 //rename the recording
 	 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
 
@@ -472,14 +475,12 @@ server.post("/recording-events", async function(req,res) {
             if (err) {
               console.log(err);
             }else{
-	      var oldFName = `${recordingFolder}/${recordingSId}.mp3`;
-	      var newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
 	      fs.renameSync(oldFName, newFName);
               console.log(`${oldFName} renamed to ${newFName}`);
             }
            })
 
-	 console.log(`Starting upload of ${recordingSid}.mp3`);
+          console.log(`Starting upload of ${newFName}`);
 	  // Upload a file
 	  const uploadedFileId = await uploadFile(authClient, newFName, GDRIVE_FOLDER_ID)
 	  sql = `UPDATE calls SET gdriveRecordingFileId = ? WHERE twilioFlowSId = ?`;
@@ -494,9 +495,6 @@ server.post("/recording-events", async function(req,res) {
 
 	  const fileId = uploadedFileId;
 	  console.log(`${recordingSid} uploaded to google. fileId = ${fileId}`);
-        } catch (error) {
-  	  console.error(error);
-        }
 
 	//if(uploadedFile){
 	      console.log("Delete recording from twilio");
@@ -506,6 +504,10 @@ server.post("/recording-events", async function(req,res) {
 	        .then(() => console.log(`Recording with SID ${recordingSid} deleted successfully`))
 	        .catch(error => console.error(`Error deleting recording: ${error.message}`));
 	//}
+        } catch (error) {
+          console.error(error);
+        }
+
 
   } catch (error) {
     console.log(error);
