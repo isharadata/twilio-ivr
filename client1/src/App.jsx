@@ -21,6 +21,8 @@ socket.on("message", data => {
   let parsedData = parsedResponse.data;
   let eventType = parsedResponse.type;
 
+console.log(`message: ${parsedData}, ${eventType});
+
   let currentKey = `${parsedResponse.id}-${eventType}`;
 
   if (!idMap.has(currentKey)) {
