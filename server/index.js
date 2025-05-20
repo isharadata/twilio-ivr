@@ -531,10 +531,11 @@ server.post("/transcription-events", (req,res) =>{
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
-})
+})io.
 
 io = io(server);
-app.use(function(req, res, next) {
+
+server.use(function(req, res, next) {
   req.io = io;
   next();
 });
@@ -556,19 +557,6 @@ server.post("/twilio-flow-events", (req,res) =>{
         console.log(`${req.body[0].data.execution_sid} - ${req.body[0].data.name} - progress`)
     }
 })
-
-/*
-io = io(server);
-app.use(function(req, res, next) {
-  req.io = io;
-  next();
-});
-
-io.on('connection', function(socket) {
-    console.log('socket.io connection made');
-});
-*/
-
 
 /*
 // Function to list available files in Google Drive
