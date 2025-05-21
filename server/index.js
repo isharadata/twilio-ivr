@@ -348,9 +348,11 @@ server.get("/call/:index", (req,res) =>{
 
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
-		    io.sockets.emit(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
+		    req.io.send(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
-	    }
+	    } else {
+		    req.io.send(`Initiating a call for ${result[0].name} - ${result[0].phone}`);
+		}
 
 	    //split cost by decimal for twilio voice to correctly articulate
 	    var strCost = result[0].cost;
@@ -383,15 +385,15 @@ server.get("/call/:index", (req,res) =>{
 		    });
 
 		    //update customer to mark that call is in progress
-                    call_progress = "UPDATE customers SET callInProgress = 1 WHERE id = ?;";
-             
-                    db.query(call_progress, [index], (err,result) =>{ 
-                        if (err) {
-                          console.log(err);
-                        }else{
-                          console.log(result);
-                        }
-                    });
+            call_progress = "UPDATE customers SET callInProgress = 1 WHERE id = ?;";
+     
+            db.query(call_progress, [index], (err,result) =>{ 
+                if (err) {
+                  console.log(err);
+                }else{
+                  console.log(result);
+                }
+            });
 
 	     })
                 
