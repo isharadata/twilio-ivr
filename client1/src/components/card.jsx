@@ -125,7 +125,7 @@ const Card = (props) => {
             <div className="actions">
                 <button className="edit" onClick={cardOpen}>Edit</button>
                 <button className="delete" onClick={() => handleDeleteCustomer(props.id)}>Delete</button>
-                <button className="call" onClick={() => { openCallProgress(); handleCallCustomer();} }>Call</button>
+                <button className="call" onClick={() => { dlgOpenCallProgress(); handleCallCustomer();} }>Call</button>
                 <button type="button" className="calllogs" onClick={() => handleCallsClick(props.id)}>Calls</button>
             </div>
         </div>
