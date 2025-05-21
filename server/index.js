@@ -493,21 +493,19 @@ server.post("/recording-events", async function(req,res) {
 	 //rename the recording
 	 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
 
-          db.query(sql, [flowSid], (err,result) =>{
-            if (err) {
-              console.log(err);
-            }else{
-	      console.log(result);
+      db.query(sql, [flowSid], (err,result) =>{
+        if (err) {
+          console.log(err);
+        }else{
+		  console.log(result);
 
-              oldFName = `${recordingFolder}/${recordingSid}.mp3`;
-              newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
+          oldFName = `${recordingFolder}/${recordingSid}.mp3`;
+          newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
 
-              console.log(`rename ${oldFName} to ${newFName}`);
-  
-            }
-           })
+          console.log(`rename ${oldFName} to ${newFName}`);
 
-          const renamed = await fs.rename(oldFName, newFName);
+        }
+       })
 
 	(async () => {
 		await new Promise((resolve) => {
