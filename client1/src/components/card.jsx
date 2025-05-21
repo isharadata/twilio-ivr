@@ -41,9 +41,9 @@ import AppContext from '../AppContext';
                           key={call.id}
                           id={call.id}
                           name={call.name}
-			  phone={call.phone}
-			  address={call.address}
-			  plan={call.plan}
+			  			  phone={call.phone}
+			  			  address={call.address}
+			  			  plan={call.plan}
                           cost={call.cost}
 
                       >
@@ -67,12 +67,21 @@ const Card = (props) => {
         baseUrl = AppContext.baseUrl;
 
     const [open, setOpen] = React.useState(false);
+    const [openCallProgress, setOpenCallProgress] = React.useState(false);
 
     const cardOpen = () => {
         setOpen(true)
     }
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const dlgOpenCallProgress = () => {
+        setOpenCallProgress(true)
+    };
+
+    const handleCloseCallProgress = () => {
+        setOpenCallProgress(false);
     };
 
     const handleDeleteCustomer = (customerId) => {
@@ -97,6 +106,8 @@ const Card = (props) => {
 		        'ngrok-skip-browser-warning' : 1
       		}
 	});
+
+	
     }
 
     const handleCallsClick = (customerId) => {
@@ -106,6 +117,7 @@ const Card = (props) => {
     return (
         <>
         <FormDialog open={open} setOpen={setOpen} id={props.id} name={props.name} phone={props.phone} address={props.address} plan={props.plan} cost={props.cost} />
+		<FormDialog open={openCallProgress} setOpen={setOpenCallProgress} id={props.id} sockid={props.sockid} />
         <div className="game-card">
             <div className="info">
                 <h4>{props.name}</h4> {props.phone} {props.address} {props.plan} ${props.cost}
@@ -113,7 +125,7 @@ const Card = (props) => {
             <div className="actions">
                 <button className="edit" onClick={cardOpen}>Edit</button>
                 <button className="delete" onClick={() => handleDeleteCustomer(props.id)}>Delete</button>
-                <button className="call" onClick={handleCallCustomer}>Call</button>
+                <button className="call" onClick={() => { openCallProgress(); handleCallCustomer();} }>Call</button>
                 <button type="button" className="calllogs" onClick={() => handleCallsClick(props.id)}>Calls</button>
             </div>
         </div>
