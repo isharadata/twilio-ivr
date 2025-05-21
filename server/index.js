@@ -336,7 +336,7 @@ server.get("/call/:index", (req,res) =>{
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
 		    req.io.send(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
-		    res.send(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
+		    //res.send(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    }
 
