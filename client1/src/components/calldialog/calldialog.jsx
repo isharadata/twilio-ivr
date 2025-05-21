@@ -23,7 +23,7 @@ socket.on("message", data => {
 
   console.log(`message: JSON.stringify(${parsedData}) ${eventType}`);
 
-  let flowParentDiv = document.evaluate('//DialogContent');
+  let flowParentDiv = document.evaluate('//DialogContent', document, null, XPathResult.ANY_TYPE, null);
   renderEvent(flowParentDiv, eventType, parsedData);
 
 });
