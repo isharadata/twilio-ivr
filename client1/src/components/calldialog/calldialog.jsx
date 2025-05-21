@@ -76,7 +76,7 @@ export default function CallDialog(props) {
 
     return (
         <div>
-            <Dialog open={props.openCallProgress} onClose={handleCloseCallProgress}>
+            <Dialog open={props.openCallProgress} onClose={handleClose}>
                 <DialogTitle>Call Progress</DialogTitle>
                 <DialogContent>
                 </DialogContent>
