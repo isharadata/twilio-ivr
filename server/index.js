@@ -353,11 +353,11 @@ server.get("/call/:index", (req,res) =>{
 
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
-		    req.io.send({'callProgress': `A call is already in progress for ${result[0].name} - ${result[0].phone}`});
+		    req.io.json({'callProgress': `A call is already in progress for ${result[0].name} - ${result[0].phone}`});
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 			console.log(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 	    } else {
-		    req.io.send({'callProgess':`Initiating a call for ${result[0].name} - ${result[0].phone}`});
+		    req.io.json({'callProgess':`Initiating a call for ${result[0].name} - ${result[0].phone}`});
 		}
 
 	    //split cost by decimal for twilio voice to correctly articulate
