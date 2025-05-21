@@ -31,6 +31,10 @@ const myDbName = process.env.myDbName;
 //https://drive.google.com/drive/folders/1Y2672RR3o1N7aBkrZmSXbyhcvglRHKm5?usp=sharing
 GDRIVE_FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
 
+// Google drive functions
+// Define the scope for Google Drive API
+const SCOPES = ['https://www.googleapis.com/auth/drive'];
+
 var con = mysql.createConnection({
   host: myDbHost,
   user: myDbUser,
@@ -89,29 +93,25 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cors());
 
-// Google drive functions
-// Define the scope for Google Drive API
-const SCOPES = ['https://www.googleapis.com/auth/drive'];
+const port = process.env.PORT || 3001;
 
-// Function to authorize and get access to Google Drive API
-/*async function authorize() {
-    const auth = new google.auth.JWT(
-        apikeys.client_email,
-        null,
-        apikeys.private_key,
-        SCOPES
-    );
+const nodeServer = server.listen(port, () =>
+    console.log('') //("Running in the port 3001")
+);
 
-    try {
-        auth.authorize();
-        return auth;
-    } catch (error) {
-        throw new Error(`Error authorizing Google Drive API: ${error.message}`);
-    }
-}
+//server.use(express.static('../client/dist')); //serving client side from express
 
-authClient = authorize();
-*/
+const io = socketIO(nodeServer, 
+	{ cors: { 
+		origin: ['https://twilio-ivr-frontend.onrender.com', 'http://localhost:3000'],
+		methods: ['GET', 'POST'],
+		allowedHeaders: ["Content-Type", "Access-Control-Allow-Origin"],
+	} 
+});
+
+io.on('connection', function(socket) {
+    console.log('socket.io connection made');
+});
 
 const authClient = new google.auth.GoogleAuth({
   keyFile: path.join(__dirname, 'apikeys.json'),
@@ -691,29 +691,6 @@ server.get("/download-twilio-recording/:recordingSid", (req, res)=>{
     } catch (error) {
         console.error(error);
     }
-});
-
-const nodeServer = server.listen(3001, () =>
-    console.log('') //("Running in the port 3001")
-);
-
-//server.use(express.static('../client/dist')); //serving client side from express
-
-const io = socketIO(nodeServer, 
-	{ cors: { 
-		origin: ['https://twilio-ivr-frontend.onrender.com', 'http://localhost:3000'],
-		methods: ['GET', 'POST'],
-		allowedHeaders: ["Content-Type", "Access-Control-Allow-Origin"],
-	} 
-});
-
-server.use(function(req, res, next) {
-  req.io = io;
-  next();
-});
-
-io.on('connection', function(socket) {
-    console.log('socket.io connection made');
 });
 
 server.post("/twilio-flow-events", (req,res) =>{
