@@ -371,7 +371,7 @@ server.get("/call/:index", (req,res) =>{
 		    });
 
 		    //update customer to mark that call is in progress
-                    call_progress = "UPDATE customers SET callInProgress = 1 WHERE customerId = ?;";
+                    call_progress = "UPDATE customers SET callInProgress = 1 WHERE id = ?;";
              
                     db.query(call_progress, [index], (err,result) =>{ 
                         if (err) {
