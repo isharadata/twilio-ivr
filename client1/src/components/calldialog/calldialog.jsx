@@ -22,6 +22,7 @@ socket.on("message", data => {
   let eventType = parsedResponse.type;
 
   console.log(`message: JSON.stringify(${parsedData}) ${eventType}`);
+
   let flowParentDiv = document.querySelector('DialogContent');
   let flowChildDiv = document.createElement('div');
   document.body.append(flowParentDiv);
@@ -30,14 +31,9 @@ socket.on("message", data => {
 });
 
 function renderEvent(flowParentDiv, flowChildDiv, eventType, parsedData) {
-  let eventName = parsedData.name
-
-  if (!eventName) {
-    eventName = "Flow Start/End"
-  }
   const childContent = `${eventType}: ${parsedData}`
   flowChildDiv.innerHTML = childContent;
-  flowParentDiv.append(flowChildDiv);
+  flowParentDiv.innerHTML = flowChildDiv;
 }
 
 export default function CallDialog(props) {
@@ -65,6 +61,7 @@ export default function CallDialog(props) {
                 <DialogContent>
 					Call progress loading ...
                 </DialogContent>
+					{callProgress}
                 <DialogActions>
                     <Button onClick={handleClose}>OK</Button>
                 </DialogActions>
