@@ -91,12 +91,13 @@ db.getConnection(function(err) {
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
-server.use(
-	{ cors: { 
+server.use(cors({
+	cors: { 
 		origin: ['https://twilio-ivr-frontend.onrender.com', 'http://localhost:3000'],
 		methods: ['GET', 'POST'],
 		allowedHeaders: ["Content-Type", "Access-Control-Allow-Origin"],
-	});
+	}
+}));
 
 const port = process.env.PORT || 3001;
 
@@ -359,10 +360,10 @@ server.get("/call/:index", (req,res) =>{
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
 			console.log(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
-		    req.io.send(JSON.stringify({'type':callProgress, 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
+		    req.io.send(JSON.stringify({'type':'callProgress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    } else {
-		    req.io.send(JSON.stringify({'type':{callProgress, 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}}));
+		    req.io.send(JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
 		}
 
 	    //split cost by decimal for twilio voice to correctly articulate
