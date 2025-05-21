@@ -56,7 +56,7 @@ const db = mysql.createPool({
 db.getConnection(function(err) {
   if (err) throw err;
   console.log("Connected to DB!");
-  var sql = "CREATE TABLE IF NOT EXISTS customers (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, address VARCHAR(255), plan VARCHAR(25), cost FLOAT, PRIMARY KEY (id))";
+  var sql = "CREATE TABLE IF NOT EXISTS customers (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, phone VARCHAR(20) NOT NULL, address VARCHAR(255), plan VARCHAR(25), cost FLOAT, callInProgress BOOLEAN NOT NULL DEFAULT false, PRIMARY KEY (id))";
 
   db.query(sql, function (err, result) {
     if (err) throw err;
@@ -333,6 +333,13 @@ server.get("/call/:index", (req,res) =>{
         }else{
 	    console.log(result);
 
+	    //if there's already a call in progress
+	    if (result[0].callInProgress) {
+		    req.io.send(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
+		    res.send(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
+		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
+	    }
+
 	    //split cost by decimal for twilio voice to correctly articulate
 	    var strCost = result[0].cost;
 	    //strCost = strCost.toString().replace('.', ' ');
@@ -362,6 +369,18 @@ server.get("/call/:index", (req,res) =>{
                 	  console.log(result);
 		        }
 		    });
+
+		    //update customer to mark that call is in progress
+                    call_progress = "UPDATE customers SET callInProgress = 1 WHERE customerId = ?;";
+             
+                    db.query(call_progress, [index], (err,result) =>{ 
+                        if (err) {
+                          console.log(err);
+                        }else{
+                          console.log(result);
+                        }
+                    });
+
 	     })
                 
 	    res.send(result);
@@ -488,7 +507,20 @@ server.post("/recording-events", async function(req,res) {
             }
            })
 
-          await fs.rename(oldFName, newFName);
+          const renamed = await fs.rename(oldFName, newFName);
+
+	(async () => {
+		await new Promise((resolve) => {
+			fs.access(newFName, fs.constants.F_OK, (err) => {
+			if (err) {
+				return fs.rename(oldFName, newFName, (err) => {
+				resolve();
+				});
+			}
+			resolve();
+			});
+		});
+	})();
 
           console.log(`Starting upload of ${newFName}`);
 
