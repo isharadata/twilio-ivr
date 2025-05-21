@@ -67,11 +67,11 @@ export default function CallDialog(props) {
         baseUrl = AppContext.baseUrl;
 
     const handleClickOpen = () => {
-        props.setOpen(true);
+        props.setOpenCallProgress(true);
     };
 
     const handleClose = () => {
-        props.setOpen(false);
+        props.setOpenCallProgress(false);
     };
 
     return (
