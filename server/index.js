@@ -53,6 +53,19 @@ const db = mysql.createPool({
     database: myDbName,
 });
 
+const asyncQuery = (sql) => {
+  return new Promise((resolve, reject) => {
+
+    db.query(sql, function(error, results, fields) {
+        if (error) {
+          console.error(error.sqlMessage);
+          return reject(new Error(error));
+        }
+        resolve(results);
+    });
+  });
+}
+
 db.getConnection(function(err) {
   if (err) throw err;
   console.log("Connected to DB!");
@@ -475,8 +488,8 @@ server.post("/recording-events", async function(req,res) {
         if (err) {
             console.log(err);
         }else{
-	    console.log(result);
-            res.send(result);
+	    	console.log(result);
+            //res.send(result);
         }
       })
 
@@ -502,23 +515,21 @@ server.post("/recording-events", async function(req,res) {
           oldFName = `${recordingFolder}/${recordingSid}.mp3`;
           newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
 
-          console.log(`rename ${oldFName} to ${newFName}`);
-
         }
        })
 
-	(async () => {
-		await new Promise((resolve) => {
-			fs.access(newFName, fs.constants.F_OK, (err) => {
-			if (err) {
-				return fs.rename(oldFName, newFName, (err) => {
-				resolve();
-				});
-			}
+	console.log(`rename ${oldFName} to ${newFName}`);
+
+	await new Promise((resolve) => {
+		fs.access(newFName, fs.constants.F_OK, (err) => {
+		if (err) {
+			return fs.rename(oldFName, newFName, (err) => {
 			resolve();
 			});
+		}
+		resolve();
 		});
-	})();
+	});
 
           console.log(`Starting upload of ${newFName}`);
 
