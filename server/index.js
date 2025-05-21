@@ -531,7 +531,7 @@ server.post("/recording-events", async function(req,res) {
 		    }
 		   })*/
 
-    	const result = await mysqlQuery(db, {
+    	const result = await asyncQuery(db, {
        		sql: `sql`,
     	});
 
@@ -721,16 +721,18 @@ server.post("/twilio-flow-events", (req,res) =>{
 
     const phone = req.body[0].data.contact_channel_address;
 
-    if (req.body[0].type == 'com.twilio.studio.flow.execution.started') {
-		req.io.send(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call started`}));
-		console.log(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call started`}))
-    } else if (req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
-		req.io.send(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call ended`}));
-        console.log(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call ended`}));
+    if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.started') {
+		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}));
+		console.log(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}))
+    } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
+		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
+        console.log(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
+    } else if (phone){ //only if phone is defined
+		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
+		console.log(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
     } else {
-		req.io.send(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call in progress`}));
-		console.log(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call in progress`}));
-    }
+		console.log(req.body[0]);
+	}
   } catch (err) {
     console.log(err);
   }
