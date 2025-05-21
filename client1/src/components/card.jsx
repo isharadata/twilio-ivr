@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./card.css"
 import FormDialog from "./dialog/dialog";
+import CallDialog from "./calldialog/calldialog";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import AppContext from '../AppContext';
