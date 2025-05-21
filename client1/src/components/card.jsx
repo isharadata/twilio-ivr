@@ -118,7 +118,7 @@ const Card = (props) => {
     return (
         <>
         <FormDialog open={open} setOpen={setOpen} id={props.id} name={props.name} phone={props.phone} address={props.address} plan={props.plan} cost={props.cost} />
-		<CallDialog open={openCallProgress} setOpen={setOpenCallProgress} id={props.id} sockid={props.sockid} />
+		<CallDialog openCallProgress={openCallProgress} setOpenCallProgress={setOpenCallProgress} id={props.id} sockid={props.sockid} />
         <div className="game-card">
             <div className="info">
                 <h4>{props.name}</h4> {props.phone} {props.address} {props.plan} ${props.cost}
