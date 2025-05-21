@@ -708,7 +708,7 @@ server.get("/download-twilio-recording/:recordingSid", (req, res)=>{
 
 server.post("/twilio-flow-events", (req,res) =>{
   try{
-    //console.log(req.body[0].data);
+    console.log(req.body[0]);
 
     if (req.body[0].type == 'com.twilio.studio.flow.execution.started') {
         //req.io.send(JSON.stringify(req.body[0]));
