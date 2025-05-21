@@ -503,33 +503,33 @@ server.post("/recording-events", async function(req,res) {
          var oldFName = '';
          var newFName = '';
 
-	 //rename the recording
-	 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
+		 //rename the recording
+		 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
 
-      db.query(sql, [flowSid], (err,result) =>{
-        if (err) {
-          console.log(err);
-        }else{
-		  console.log(result);
+		  db.query(sql, [flowSid], (err,result) =>{
+		    if (err) {
+		      console.log(err);
+		    }else{
+			  console.log(result);
 
-          oldFName = `${recordingFolder}/${recordingSid}.mp3`;
-          newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
+		      oldFName = `${recordingFolder}/${recordingSid}.mp3`;
+		      newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
 
-        }
-       })
+		    }
+		   })
 
-	console.log(`rename ${oldFName} to ${newFName}`);
+		console.log(`rename ${oldFName} to ${newFName}`);
 
-	await new Promise((resolve) => {
-		fs.access(newFName, fs.constants.F_OK, (err) => {
-		if (err) {
-			return fs.rename(oldFName, newFName, (err) => {
+		await new Promise((resolve) => {
+			fs.access(newFName, fs.constants.F_OK, (err) => {
+			if (err) {
+				return fs.rename(oldFName, newFName, (err) => {
+				resolve();
+				});
+			}
 			resolve();
 			});
-		}
-		resolve();
 		});
-	});
 
           console.log(`Starting upload of ${newFName}`);
 
@@ -699,7 +699,13 @@ const nodeServer = server.listen(3001, () =>
 
 //server.use(express.static('../client/dist')); //serving client side from express
 
-const io = socketIO(nodeServer, { cors: { origin: '*' } });
+const io = socketIO(nodeServer, 
+	{ cors: { 
+		origin: ['https://twilio-ivr-frontend.onrender.com', 'http://localhost:3000'],
+		methods: ['GET'. 'POST'],
+		allowedHeaders: ["Content-Type", "Access-Control-Allow-Origin"],
+	} 
+});
 
 server.use(function(req, res, next) {
   req.io = io;
@@ -712,7 +718,8 @@ io.on('connection', function(socket) {
 
 server.post("/twilio-flow-events", (req,res) =>{
   try{
-    console.log(req.body);
+    console.log(req.body[0].data);
+
     if (req.body[0].type == 'com.twilio.studio.flow.execution.started') {
         req.io.send(JSON.stringify(req.body[0]));
         console.log('started')
