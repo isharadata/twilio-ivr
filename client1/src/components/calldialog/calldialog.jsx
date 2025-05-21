@@ -59,7 +59,7 @@ export default function CallDialog(props) {
                 <DialogContent>
 					Call progress loading ...
                 </DialogContent>
-					{callProgress}
+
                 <DialogActions>
                     <Button onClick={handleClose}>OK</Button>
                 </DialogActions>
