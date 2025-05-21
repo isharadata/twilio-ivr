@@ -8,8 +8,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {useState} from "react";
 import axios from "axios";
 import AppContext from '../../AppContext';
+import io from 'socket.io-client';
 
-//const socket = io("https://twilio-ivr-rll6.onrender.com");
+const socket = io("https://twilio-ivr-rll6.onrender.com");
 
 socket.on("connect", () => {
   console.log('connected');
