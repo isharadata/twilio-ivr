@@ -23,16 +23,14 @@ socket.on("message", data => {
 
   console.log(`message: JSON.stringify(${parsedData}) ${eventType}`);
 
-  let flowParentDiv = document.querySelector('DialogContent');
-  let flowChildDiv = document.createElement('div');
-  document.body.append(flowParentDiv);
-  renderEvent(flowParentDiv, flowChildDiv, eventType, parsedData);
+  let flowParentDiv = document.evaluate('//DialogContent');
+  renderEvent(flowParentDiv, eventType, parsedData);
 
 });
 
-function renderEvent(flowParentDiv, flowChildDiv, eventType, parsedData) {
-  const childContent = `${eventType}: ${parsedData}`
-  flowChildDiv.innerHTML = childContent;
+function renderEvent(flowParentDiv, eventType, parsedData) {
+  const childContent = `${eventType}: ${parsedData}`;
+
   flowParentDiv.innerHTML = flowChildDiv;
 }
 
