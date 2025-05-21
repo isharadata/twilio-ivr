@@ -91,7 +91,12 @@ db.getConnection(function(err) {
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
-server.use(cors());
+server.use(
+	{ cors: { 
+		origin: ['https://twilio-ivr-frontend.onrender.com', 'http://localhost:3000'],
+		methods: ['GET', 'POST'],
+		allowedHeaders: ["Content-Type", "Access-Control-Allow-Origin"],
+	});
 
 const port = process.env.PORT || 3001;
 
