@@ -702,7 +702,7 @@ const nodeServer = server.listen(3001, () =>
 const io = socketIO(nodeServer, 
 	{ cors: { 
 		origin: ['https://twilio-ivr-frontend.onrender.com', 'http://localhost:3000'],
-		methods: ['GET'. 'POST'],
+		methods: ['GET', 'POST'],
 		allowedHeaders: ["Content-Type", "Access-Control-Allow-Origin"],
 	} 
 });
