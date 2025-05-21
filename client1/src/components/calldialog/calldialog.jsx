@@ -31,7 +31,7 @@ socket.on("message", data => {
 function renderEvent(flowParentDiv, eventType, parsedData) {
   const childContent = `${eventType}: ${parsedData}`;
 
-  flowParentDiv.innerHTML = flowChildDiv;
+  flowParentDiv.innerHTML = childContent;
 }
 
 export default function CallDialog(props) {
