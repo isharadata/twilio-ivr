@@ -109,6 +109,11 @@ const io = socketIO(nodeServer,
 	} 
 });
 
+server.use(function(req, res, next) {
+  req.io = io;
+  next();
+});
+
 io.on('connection', function(socket) {
     console.log('socket.io connection made');
 });
@@ -350,6 +355,7 @@ server.get("/call/:index", (req,res) =>{
 	    if (result[0].callInProgress) {
 		    req.io.send(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
+			console.log(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 	    } else {
 		    req.io.send(`Initiating a call for ${result[0].name} - ${result[0].phone}`);
 		}
