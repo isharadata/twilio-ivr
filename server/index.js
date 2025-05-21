@@ -708,20 +708,20 @@ server.get("/download-twilio-recording/:recordingSid", (req, res)=>{
 
 server.post("/twilio-flow-events", (req,res) =>{
   try{
-    console.log(req.body[0].data);
+    //console.log(req.body[0].data);
 
     if (req.body[0].type == 'com.twilio.studio.flow.execution.started') {
         //req.io.send(JSON.stringify(req.body[0]));
 		req.io.send(JSON.stringify({'type':'callProgress', 'data': `${result[0].name} - ${result[0].phone}: Call started`}));
-        console.log('started')
+        console.log(`${result[0].name} - ${result[0].phone}: Call started`)
     } else if (req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
         //req.io.send(JSON.stringify(req.body[0]));
 		req.io.send(JSON.stringify({'type':'callProgress', 'data': `${result[0].name} - ${result[0].phone}: Call ended`}));
-        console.log('ended')
+        console.log(`${result[0].name} - ${result[0].phone}: Call ended`)
     } else {
         //req.io.send(JSON.stringify(req.body[0]));
 		req.io.send(JSON.stringify({'type':'callProgress', 'data': `${result[0].name} - ${result[0].phone}: Call in progress`}));
-        console.log(`${req.body[0].data.execution_sid} - ${req.body[0].data.name} - progress`)
+        console.log(`${result[0].name} - ${result[0].phone}: Call in progress`)
     }
   } catch (err) {
     console.log(err);
