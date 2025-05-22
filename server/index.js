@@ -722,19 +722,20 @@ server.post("/twilio-flow-events", (req,res) =>{
     const phone = req.body[0].data.contact_channel_address;
 
     if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.started') {
-		req.io.send({'type':'Call Progress', 'data': `${phone}: Call started`});
+		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}));
 		console.log({'type':'Call Progress', 'data': `${phone}: Call started`})
     } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
-		req.io.send({'type':'Call Progress', 'data': `${phone}: Call ended`});
+		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
         console.log({'type':'Call Progress', 'data': `${phone}: Call ended`});
     } else if (phone){ //only if phone is defined
-		req.io.send({'type':'Call Progress', 'data': `${phone}: Call in progress`});
+		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
 		console.log({'type':'Call Progress', 'data': `${phone}: Call in progress`});
     } else {
         var transitioned_from = req.body[0].data.transitioned_from;
 		var transitioned_to = req.body[0].data.transitioned_to;
         var name = req.body[0].data.name;
-		console.log({'type':'Call Progress', 'data': `${transitioned_from} => ${transitioned_to}: ${name}`});
+		var execution_sid = req.body[0].data.execution_sid;
+		console.log({'type':'Call Progress', 'data': `${execution_sid}:: ${transitioned_from} => ${transitioned_to}: ${name}`});
 	}
   } catch (err) {
     console.log(err);
