@@ -411,6 +411,8 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
             console.log(err);
         }else{
 
+		console.log(`sql = ${sql});
+
 	    console.log(`result = ${result}`);
 
 		setClientSocketToPhone(clientSocketId, result[0].phone);
