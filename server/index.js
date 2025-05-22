@@ -45,6 +45,7 @@ function getClientSocketFromPhone(phone) {
 	for (const [key, value] of clientSockets.entries()) {
         if (value === phone)
             return key;
+	}
 
 	return undefined;
 }
@@ -396,7 +397,7 @@ server.delete("/delete/:index", (req,res) =>{
 })
 
 server.get("/call/:index/:clientSocketId", (req,res) =>{
-	console.log("calling: " + req.params);
+	console.log(`calling: ${req.params}`);
 
     const { index } = parseInt(req.params.index, 10);
 	const { clientSocketId } = req.params.clientSocketId;
@@ -421,7 +422,7 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
 			console.log(`clientId=${clientId}: A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 
 			if(clientId)
-			    socket.to(clientId).emit('Call Progress', JSON.stringify({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
+			    //socket.to(clientId).emit('Call Progress', JSON.stringify({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
 
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    } else {
@@ -793,10 +794,10 @@ server.post("/twilio-flow-events", (req,res) =>{
 		if (clientId) {
 			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
 
-	    	socketClients[clientId] = '';
+	    	setClientSocketToPhone(clientId, '');
 		}
         
-		console.log(`clientId=${clientId} {'type':'Call Progress', 'data': ${phone}: Call ended`);
+		console.log(`clientId=${clientId} 'type':'Call Progress', 'data': ${phone}: Call ended`);
 
 		//rename the recording
 		const sql = `UPDATE customers SET callInProgress = false WHERE phone = ?`;
@@ -812,13 +813,13 @@ server.post("/twilio-flow-events", (req,res) =>{
 		if (clientId)
 			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
 
-		console.log(`clientId=${clientId} {'type':'Call Progress', 'data': ${phone}: Call in progress`);
+		console.log(`clientId=${clientId} 'type':'Call Progress', 'data': ${phone}: Call in progress`);
     } else {
         var transitioned_from = req.body[0].data.transitioned_from;
 		var transitioned_to = req.body[0].data.transitioned_to;
         var name = req.body[0].data.name;
 		var execution_sid = req.body[0].data.execution_sid;
-		console.log({'type':'Call Progress', 'data': `${execution_sid}:: ${transitioned_from} => ${transitioned_to}: ${name}`});
+		console.log(`{'type':'Call Progress', 'data': ${execution_sid}:: ${transitioned_from} => ${transitioned_to}: ${name}}`);
 	}
   } catch (err) {
     console.log(err);
