@@ -36,17 +36,15 @@ GDRIVE_FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
 // Define the scope for Google Drive API
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
-clientSockets = [];
+clientSockets = new Map();
 
 function getClientSocketFromPhone(phone) {
 
 	console.log(`search for phone: ${phone}`);
 
-	for (const key in clientSockets) {
-	    if (clientSockets.hasOwnProperty(key) && clientSockets[key].value === phone) {
-	      return key;
-	    }
-	  }
+	for (const [key, value] of clientSockets.entries()) {
+        if (value === phone)
+            return key;
 
 	return undefined;
 }
@@ -55,9 +53,15 @@ function setClientSocketToPhone(socketId, phone) {
 
 	console.log(`set socketId: ${socketId} to phone: ${phone}`);
 
-	clientSockets[socketId] = phone;
+	clientSockets.set(socketId, phone);
 
 	console.log(clientSockets);
+}
+
+function deleteClientSocket(socketId) {
+	console.log(`delete socketId: ${socketId});
+
+	clientSockets.delete(socketId);
 }
 
 var con = mysql.createConnection({
@@ -161,7 +165,7 @@ io.on('connection', function(socket) {
 
     	console.log(`Message from ${clientId}: ${data}`);
 		
-		setClientSocketToPhone(clientId,customerPhone);
+		setClientSocketToPhone(clientId, customerPhone);
   	});
 
   	socket.on('disconnect', () => {
