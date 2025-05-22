@@ -109,7 +109,7 @@ const Card = (props) => {
       		}
 		});
 
-		socket.write(props.id);	
+		socket.emit(props.id);	
     }
 
     const handleCallsClick = (customerId) => {
