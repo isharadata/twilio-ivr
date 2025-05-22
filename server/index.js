@@ -391,7 +391,7 @@ server.get("/call/:index", (req,res) =>{
         }else{
 	    console.log(result);
 
-		var clientId = getClientSocketFromPhone(phone);
+		var clientId = getClientSocketFromPhone(result[0].phone);
 
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
