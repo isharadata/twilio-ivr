@@ -39,6 +39,7 @@ const SCOPES = ['https://www.googleapis.com/auth/drive'];
 clientSockets = new Map();
 
 function getClientSocketFromPhone(phone) {
+	console.log(clientSockets);
 
 	console.log(`search for phone: ${phone}`);
 
