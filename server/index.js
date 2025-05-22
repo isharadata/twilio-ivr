@@ -390,8 +390,8 @@ server.delete("/delete/:index", (req,res) =>{
 })
 
 server.get("/call/:index/:clientSocketId", (req,res) =>{
-    const { index } = req.params[index];
-	const { clientId } = req.params[clientSocketId];
+    const { index } = req.params['index'];
+	const { clientId } = req.params['clientSocketId'];
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
