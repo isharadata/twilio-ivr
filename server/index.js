@@ -795,7 +795,7 @@ server.post("/twilio-flow-events", (req,res) =>{
 		console.log(`clientId=${clientId} 'type':'callProgress', 'data': ${phone}: Call started`)
     } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
 		if (clientId) {
-			req.io.to(clientId).emit("callProgress", JSON.stringify("callProgress", {'type':'callProgress', 'data': `${phone}: Call ended`}));
+			req.io.to(clientId).emit("callProgress", JSON.stringify({'type':'callProgress', 'data': `${phone}: Call ended`}));
 
 	    	setClientSocketToPhone(clientId, '');
 		}
@@ -809,7 +809,7 @@ server.post("/twilio-flow-events", (req,res) =>{
 			if (err) {
 			  console.log(err);
 			}else{
-			  console.log(`Set callInProgress to false for ${phone}`);
+			  console.log(`Set callInProgress to false for ${phone}: Done`);
 			}
 		});
     } else if (phone){ //only if phone is defined
