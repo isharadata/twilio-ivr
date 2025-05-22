@@ -40,7 +40,7 @@ clientSockets = [];
 
 function getClientSocketFromPhone(phone) {
 	for (const key in clientSockets) {
-	    if (clientSockets.hasOwnProperty(key) && array[key] === phone) {
+	    if (clientSockets.hasOwnProperty(key) && clientSockets[key] === phone) {
 	      return key;
 	    }
 	  }
