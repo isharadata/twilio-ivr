@@ -395,7 +395,7 @@ server.get("/call/:index", (req,res) =>{
 
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
-			console.log(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
+			console.log(`clientId=${clientId}: A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 
 			if(clientId)
 			    socket.to(clientId).emit('Call Progress', JSON.stringify({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
@@ -403,7 +403,8 @@ server.get("/call/:index", (req,res) =>{
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    } else {
 			if(clientId)
-		    socket.to(clientId).emit("Call Progress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
+			    socket.to(clientId).emit("Call Progress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
+			console.log(`clientId=${clientId}: "Call Progress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
 		}
 
 	    //split cost by decimal for twilio voice to correctly articulate
@@ -763,12 +764,12 @@ server.post("/twilio-flow-events", (req,res) =>{
 		if (clientId)
 			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}));
 
-		console.log({'type':'Call Progress', 'data': `${phone}: Call started`})
+		console.log(`clientId=${clientId} 'type':'Call Progress', 'data': ${phone}: Call started`})
     } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
 		if (clientId)
 			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
         
-		console.log({'type':'Call Progress', 'data': `${phone}: Call ended`});
+		console.log(`clientId=${clientId} {'type':'Call Progress', 'data': ${phone}: Call ended`});
 
 		//rename the recording
 		const sql = `UPDATE customers SET callInProgress = false WHERE phone = ?`;
@@ -784,7 +785,7 @@ server.post("/twilio-flow-events", (req,res) =>{
 		if (clientId)
 			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
 
-		console.log({'type':'Call Progress', 'data': `${phone}: Call in progress`});
+		console.log(`clientId=${clientId} {'type':'Call Progress', 'data': ${phone}: Call in progress`});
     } else {
         var transitioned_from = req.body[0].data.transitioned_from;
 		var transitioned_to = req.body[0].data.transitioned_to;
