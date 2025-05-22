@@ -727,6 +727,17 @@ server.post("/twilio-flow-events", (req,res) =>{
     } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
 		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
         console.log({'type':'Call Progress', 'data': `${phone}: Call ended`});
+
+		//rename the recording
+		const sql = `UPDATE customers SET callInProgress = false WHERE phone = ?`;
+
+		db.query(sql, [phone], (err,result) =>{
+			if (err) {
+			  console.log(err);
+			}else{
+			  console.log('Set callInProgress to false for ${phone}');
+			}
+		});
     } else if (phone){ //only if phone is defined
 		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
 		console.log({'type':'Call Progress', 'data': `${phone}: Call in progress`});
