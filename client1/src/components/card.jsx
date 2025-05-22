@@ -5,6 +5,7 @@ import CallDialog from "./calldialog/calldialog";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import AppContext from '../AppContext';
+import { socket } from '../socket';
 
     function callsOpen(customerId){
       const bUrl = `${window.location.host}`;
@@ -106,9 +107,9 @@ const Card = (props) => {
 		headers: {
 		        'ngrok-skip-browser-warning' : 1
       		}
-	});
+		});
 
-	
+		socket.write(props.id);	
     }
 
     const handleCallsClick = (customerId) => {

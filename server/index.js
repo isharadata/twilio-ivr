@@ -36,6 +36,18 @@ GDRIVE_FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
 // Define the scope for Google Drive API
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
+clientSockets = [];
+
+function getClientSocketFromPhone(phone) {
+	for (const key in clientSockets) {
+	    if (clientSockets.hasOwnProperty(key) && array[key] === phone) {
+	      return key;
+	    }
+	  }
+
+	return undefined;
+}
+
 var con = mysql.createConnection({
   host: myDbHost,
   user: myDbUser,
@@ -125,7 +137,25 @@ server.use(function(req, res, next) {
 });
 
 io.on('connection', function(socket) {
-    console.log('socket.io connection made');
+	var clientId = socket.id;
+
+	clientSockets[socket.id] = '';
+
+    console.log('Client connected: ${clientId}`);
+
+    socket.on('message', (data) => {
+    	const clientId = socket.id;
+		const customerPhone = data;
+
+    	console.log(`Message from ${clientId}: ${data}`);
+		
+		clientSockets[clientId] = customerPhone;
+  });
+
+  socket.on('disconnect', () => {
+    delete clientSockets[clientId];
+    console.log(`Client disconnected: ${clientId}`);
+  });
 });
 
 const authClient = new google.auth.GoogleAuth({
@@ -364,7 +394,12 @@ server.get("/call/:index", (req,res) =>{
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
 			console.log(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
-		    req.io.send(JSON.stringify({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
+
+			var clientId = getClientSocketFromPhone(phone);
+
+			if(clientId)
+			    socket.to(clientId).send(JSON.stringify({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
+
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    } else {
 		    req.io.send(JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));

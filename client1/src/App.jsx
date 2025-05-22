@@ -5,16 +5,34 @@ import Card from "./components/card";
 import Call from "./components/call";
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import AppContext from './AppContext';
-import io from 'socket.io-client';
+import { socket } from './socket';
 
-const socket = io("https://twilio-ivr-rll6.onrender.com");
+const [socketConnected, setSockConnected] = useState(socket.connected);
+const [fooEvents, setFooEvents] = useState([]);
 
-var idMap = new Map();
-var executionMap = new Map();
+  useEffect(() => {
+    function onConnect() {
+      setSockConnected(true);
+    }
 
-socket.on("connect", () => {
-  console.log('connected');
-});
+    function onDisconnect() {
+      setSockConnected(false);
+    }
+
+    function onFooEvent(value) {
+      setFooEvents(previous => [...previous, value]);
+    }
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    socket.on('foo', onFooEvent);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+      socket.off('foo', onFooEvent);
+    };
+  }, []);
 
 function ItemDetailPage() {
     const bUrl = `${window.location.host}`;
