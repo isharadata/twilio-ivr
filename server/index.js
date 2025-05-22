@@ -3,8 +3,8 @@ const socketIO = require('socket.io');
 
 const server = express();
 
-//const mysql = require('mysql');
-const mysql = require('mysql2/promise');
+const mysql = require('mysql');
+//const mysql2 = require('mysql2/promise');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
@@ -61,18 +61,17 @@ const db = mysql.createPool({
     queueLimit: 0
 });
 
-async function asyncQuery(sql, values) {
-      let connection;
-      try {
-        connection = await pool.getConnection();
-        const [rows] = await connection.execute(sql, values);
-        return rows;
-      } catch (error) {
-        console.error('Error executing query:', error);
-        throw error;
-      } finally {
-        if (connection) connection.release();
-      }
+const asyncQuery = (sql) => {
+  return new Promise((resolve, reject) => {
+
+    db.query(sql, function(error, results, fields) {
+        if (error) {
+          console.error(error.sqlMessage);
+          return reject(new Error(error));
+        }
+        resolve(results);
+    });
+  });
 }
 
 db.getConnection(function(err) {
@@ -522,7 +521,7 @@ server.post("/recording-events", async function(req,res) {
          var newFName = '';
 
 		 //rename the recording
-		 sql1 = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ${flowSid}`;
+		 sql1 = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
 
 		  /*db.query(sql, [flowSid], (err,result) =>{
 		    if (err) {
@@ -536,18 +535,7 @@ server.post("/recording-events", async function(req,res) {
 		    }
 		   })*/
 
-      try {
-        const result = await executeQuery(sql1, [flowSid]);
-
-        if (result.length > 0) {
-          console.log(result[0]);
-        } else {
-          console.log('not found');
-        }
-      } catch (error) {
-        // Handle the error
-		console.log(error);
-      }
+    	const result = await asyncQuery(sql1, [flowSid]);
 
 		oldFName = `${recordingFolder}/${recordingSid}.mp3`;
 		newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
