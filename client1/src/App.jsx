@@ -7,33 +7,6 @@ import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import AppContext from './AppContext';
 import { socket } from './socket';
 
-const [socketConnected, setSockConnected] = useState(socket.connected);
-const [fooEvents, setFooEvents] = useState([]);
-
-  useEffect(() => {
-    function onConnect() {
-      setSockConnected(true);
-    }
-
-    function onDisconnect() {
-      setSockConnected(false);
-    }
-
-    function onFooEvent(value) {
-      setFooEvents(previous => [...previous, value]);
-    }
-
-    socket.on('connect', onConnect);
-    socket.on('disconnect', onDisconnect);
-    socket.on('foo', onFooEvent);
-
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-      socket.off('foo', onFooEvent);
-    };
-  }, []);
-
 function ItemDetailPage() {
     const bUrl = `${window.location.host}`;
 
@@ -138,6 +111,33 @@ function HomePage() {
     const [customers, setCustomers] = useState();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+const [socketConnected, setSockConnected] = useState(socket.connected);
+const [fooEvents, setFooEvents] = useState([]);
+
+  useEffect(() => {
+    function onConnect() {
+      setSockConnected(true);
+    }
+
+    function onDisconnect() {
+      setSockConnected(false);
+    }
+
+    function onFooEvent(value) {
+      setFooEvents(previous => [...previous, value]);
+    }
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    socket.on('foo', onFooEvent);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+      socket.off('foo', onFooEvent);
+    };
+  }, []);
 
     const handleChangeValues = (value) => {
         setValues((prevValue) => ({
