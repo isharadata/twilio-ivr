@@ -3,7 +3,8 @@ const socketIO = require('socket.io');
 
 const server = express();
 
-const mysql = require('mysql');
+//const mysql = require('mysql');
+const mysql = require('mysql2/promise');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
@@ -55,19 +56,23 @@ const db = mysql.createPool({
     user: myDbUser,
     password: myDbPass,
     database: myDbName,
+	waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-const asyncQuery = (sql) => {
-  return new Promise((resolve, reject) => {
-
-    db.query(sql, function(error, results, fields) {
-        if (error) {
-          console.error(error.sqlMessage);
-          return reject(new Error(error));
-        }
-        resolve(results);
-    });
-  });
+async function asyncQuery(sql, values) {
+      let connection;
+      try {
+        connection = await pool.getConnection();
+        const [rows] = await connection.execute(sql, values);
+        return rows;
+      } catch (error) {
+        console.error('Error executing query:', error);
+        throw error;
+      } finally {
+        if (connection) connection.release();
+      }
 }
 
 db.getConnection(function(err) {
@@ -360,7 +365,7 @@ server.get("/call/:index", (req,res) =>{
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
 			console.log(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
-		    req.io.send(JSON.stringify({'type':'callProgress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
+		    req.io.send({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`});
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    } else {
 		    req.io.send(JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
@@ -531,11 +536,18 @@ server.post("/recording-events", async function(req,res) {
 		    }
 		   })*/
 
-    	const result = await asyncQuery(db, {
-       		sql: sql1,
-    	});
+      try {
+        const result = await executeQuery(sql1, [flowSid]);
 
-		console.log(result);
+        if (result.length > 0) {
+          console.log(result[0]);
+        } else {
+          console.log('not found');
+        }
+      } catch (error) {
+        // Handle the error
+		console.log(error);
+      }
 
 		oldFName = `${recordingFolder}/${recordingSid}.mp3`;
 		newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
@@ -722,19 +734,19 @@ server.post("/twilio-flow-events", (req,res) =>{
     const phone = req.body[0].data.contact_channel_address;
 
     if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.started') {
-		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}));
-		console.log(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}))
+		req.io.send({'type':'Call Progress', 'data': `${phone}: Call started`});
+		console.log({'type':'Call Progress', 'data': `${phone}: Call started`})
     } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
-		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
-        console.log(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
+		req.io.send({'type':'Call Progress', 'data': `${phone}: Call ended`});
+        console.log({'type':'Call Progress', 'data': `${phone}: Call ended`});
     } else if (phone){ //only if phone is defined
-		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
-		console.log(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
+		req.io.send({'type':'Call Progress', 'data': `${phone}: Call in progress`});
+		console.log({'type':'Call Progress', 'data': `${phone}: Call in progress`});
     } else {
         var transitioned_from = req.body[0].data.transitioned_from;
 		var transitioned_to = req.body[0].data.transitioned_to;
         var name = req.body[0].data.name;
-		console.log(JSON.stringify({'type':'Call Progress', 'data': `${transitioned_from} => ${transitioned_to}: ${name}`}));
+		console.log({'type':'Call Progress', 'data': `${transitioned_from} => ${transitioned_to}: ${name}`});
 	}
   } catch (err) {
     console.log(err);
