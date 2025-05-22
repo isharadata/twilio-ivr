@@ -777,7 +777,7 @@ server.post("/twilio-flow-events", (req,res) =>{
 			if (err) {
 			  console.log(err);
 			}else{
-			  console.log('Set callInProgress to false for ${phone}');
+			  console.log(`Set callInProgress to false for ${phone}`);
 			}
 		});
     } else if (phone){ //only if phone is defined
