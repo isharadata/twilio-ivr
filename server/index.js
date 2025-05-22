@@ -389,8 +389,9 @@ server.delete("/delete/:index", (req,res) =>{
     db.query(sql1, [index], (err,result) =>{err ? console.log('') : res.send(result)})
 })
 
-server.get("/call/:index", (req,res) =>{
-    const { index } = req.params
+server.get("/call/:index/:clientSocketId", (req,res) =>{
+    const { index } = req.params[index];
+	const { clientId } = req.params[clientSocketId];
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
@@ -401,6 +402,8 @@ server.get("/call/:index", (req,res) =>{
             console.log(err);
         }else{
 	    console.log(result);
+
+		setClientSocketToPhone(clientId, result[0].phone);
 
 		var clientId = getClientSocketFromPhone(result[0].phone);
 

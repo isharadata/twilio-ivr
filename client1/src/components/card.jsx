@@ -103,13 +103,13 @@ const Card = (props) => {
     }
 
     const handleCallCustomer = () => {
-        axios.get(`${baseUrl}/call/${props.id}`, {
+        axios.get(`${baseUrl}/call/${props.id}/${socket.id}`, {
 		headers: {
 		        'ngrok-skip-browser-warning' : 1
       		}
 		});
 
-		socket.emit(props.id);	
+		socket.emit(props.id);
     }
 
     const handleCallsClick = (customerId) => {
