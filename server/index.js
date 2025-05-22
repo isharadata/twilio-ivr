@@ -521,7 +521,7 @@ server.post("/recording-events", async function(req,res) {
          var newFName = '';
 
 		 //rename the recording
-		 sql1 = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
+		 sql1 = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ${flowSid}`;
 
 		  /*db.query(sql, [flowSid], (err,result) =>{
 		    if (err) {
@@ -535,7 +535,7 @@ server.post("/recording-events", async function(req,res) {
 		    }
 		   })*/
 
-    	const result = await asyncQuery(sql1, [flowSid]);
+    	const result = await asyncQuery(sql1);
 
 		oldFName = `${recordingFolder}/${recordingSid}.mp3`;
 		newFName = `${recordingFolder}/${result[0].phone}_${result[0].startTime}.mp3`;
