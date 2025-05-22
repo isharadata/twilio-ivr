@@ -39,6 +39,9 @@ const SCOPES = ['https://www.googleapis.com/auth/drive'];
 clientSockets = [];
 
 function getClientSocketFromPhone(phone) {
+
+	console.log(`search for phone: ${phone}`);
+
 	for (const key in clientSockets) {
 	    if (clientSockets.hasOwnProperty(key) && clientSockets[key].value === phone) {
 	      return key;
@@ -49,6 +52,9 @@ function getClientSocketFromPhone(phone) {
 }
 
 function setClientSocketToPhone(socketId, phone) {
+
+	console.log(`set socketId: ${socketId} to phone: ${phone}`);
+
 	clientSockets[socketId] = phone;
 
 	console.log(clientSockets);
@@ -145,28 +151,24 @@ server.use(function(req, res, next) {
 io.on('connection', function(socket) {
 	var clientId = socket.id;
 
-//	clientSockets[socket.id] = '';
+    console.log(`Client connected: ${clientId}`);
 
 	setClientSocketToPhone(clientId, '');
 
-    console.log(`Client connected: ${clientId}`);
-
     socket.on('message', (data) => {
-    	const clientId = socket.id;
+
 		const customerPhone = data;
 
     	console.log(`Message from ${clientId}: ${data}`);
 		
-		//clientSockets[clientId] = customerPhone;
+		setClientSocketToPhone(clientId,customerPhone);
+  	});
 
-		setClientSocketToPhone(clientId, phone);
-  });
+  	socket.on('disconnect', () => {
+    	delete clientSockets[clientId];
 
-  socket.on('disconnect', () => {
-    delete clientSockets[clientId];
-
-    console.log(`Client disconnected: ${clientId}`);
-  });
+    	console.log(`Client disconnected: ${clientId}`);
+  	});
 });
 
 const authClient = new google.auth.GoogleAuth({
@@ -392,8 +394,8 @@ server.delete("/delete/:index", (req,res) =>{
 server.get("/call/:index/:clientSocketId", (req,res) =>{
 	console.log(req.params);
 
-    const { index } = req.params.index;
-	const { clientId } = req.params.clientSocketId;
+    const { index } = parseInt(req.params.index, 10);
+	const { clientSocketId } = req.params.clientSocketId;
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
@@ -406,7 +408,7 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
 
 	    console.log(`result = ${result}`);
 
-		setClientSocketToPhone(clientId, result[0].phone);
+		setClientSocketToPhone(clientSocketId, result[0].phone);
 
 		var clientId = getClientSocketFromPhone(result[0].phone);
 
