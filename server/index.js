@@ -532,7 +532,7 @@ server.post("/recording-events", async function(req,res) {
 		   })*/
 
     	const result = await asyncQuery(db, {
-       		sql: `sql`,
+       		sql: sql,
     	});
 
 		console.log(result);
@@ -731,7 +731,10 @@ server.post("/twilio-flow-events", (req,res) =>{
 		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
 		console.log(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
     } else {
-		console.log(req.body[0]);
+        var transitioned_from = req.body[0].data.transitioned_from;
+		var transitioned_to = req.body[0].data.transitioned_to;
+        var name = req.body[0].data.name;
+		console.log(JSON.stringify({'type':'Call Progress', 'data': `${transitioned_from} => ${transitioned_to}: ${name}`}));
 	}
   } catch (err) {
     console.log(err);
