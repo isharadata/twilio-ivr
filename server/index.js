@@ -59,7 +59,7 @@ function setClientSocketToPhone(socketId, phone) {
 }
 
 function deleteClientSocket(socketId) {
-	console.log(`delete socketId: ${socketId});
+	console.log(`delete socketId: ${socketId}`);
 
 	clientSockets.delete(socketId);
 }
