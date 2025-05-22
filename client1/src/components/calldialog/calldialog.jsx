@@ -20,7 +20,7 @@ function disconnect() {
 }
 
 socket.on("connect", () => {
-  console.log('calldialog connected');
+  console.log(`calldialog connected: ${socketId}`);
 });
 
 socket.on("message", data => {

@@ -112,8 +112,8 @@ function HomePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-const [socketConnected, setSockConnected] = useState(socket.connected);
-const [fooEvents, setFooEvents] = useState([]);
+	const [socketConnected, setSockConnected] = useState(socket.connected);
+	const [fooEvents, setFooEvents] = useState([]);
 
   useEffect(() => {
     function onConnect() {
