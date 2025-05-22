@@ -517,7 +517,7 @@ server.post("/recording-events", async function(req,res) {
          var newFName = '';
 
 		 //rename the recording
-		 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ?`;
+		 sql = `SELECT a.*, b.* FROM customers a INNER JOIN calls b ON a.id = b.customerId WHERE b.twilioFlowSId = ${flowSid}`;
 
 		  /*db.query(sql, [flowSid], (err,result) =>{
 		    if (err) {
@@ -532,7 +532,7 @@ server.post("/recording-events", async function(req,res) {
 		   })*/
 
     	const result = await asyncQuery(db, {
-       		sql: sql,
+       		sql: ${sql},
     	});
 
 		console.log(result);
