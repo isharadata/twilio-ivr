@@ -396,7 +396,7 @@ server.delete("/delete/:index", (req,res) =>{
 })
 
 server.get("/call/:index/:clientSocketId", (req,res) =>{
-	console.log(req.params);
+	console.log("calling: " + req.params);
 
     const { index } = parseInt(req.params.index, 10);
 	const { clientSocketId } = req.params.clientSocketId;
