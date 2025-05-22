@@ -757,12 +757,18 @@ server.post("/twilio-flow-events", (req,res) =>{
 
     const phone = req.body[0].data.contact_channel_address;
 
+	var clientId = getClientSocketFromPhone(result[0].phone);
+
     if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.started') {
-		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}));
+		if (clientId)
+			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}));
+
 		console.log({'type':'Call Progress', 'data': `${phone}: Call started`})
     } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
-		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
-        console.log({'type':'Call Progress', 'data': `${phone}: Call ended`});
+		if (clientId)
+			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
+        
+		console.log({'type':'Call Progress', 'data': `${phone}: Call ended`});
 
 		//rename the recording
 		const sql = `UPDATE customers SET callInProgress = false WHERE phone = ?`;
@@ -775,7 +781,9 @@ server.post("/twilio-flow-events", (req,res) =>{
 			}
 		});
     } else if (phone){ //only if phone is defined
-		req.io.send(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
+		if (clientId)
+			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
+
 		console.log({'type':'Call Progress', 'data': `${phone}: Call in progress`});
     } else {
         var transitioned_from = req.body[0].data.transitioned_from;
