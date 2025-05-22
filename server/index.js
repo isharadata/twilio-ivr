@@ -141,7 +141,7 @@ io.on('connection', function(socket) {
 
 	clientSockets[socket.id] = '';
 
-    console.log('Client connected: ${clientId}`);
+    console.log(`Client connected: ${clientId}`);
 
     socket.on('message', (data) => {
     	const clientId = socket.id;
