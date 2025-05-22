@@ -391,18 +391,19 @@ server.get("/call/:index", (req,res) =>{
         }else{
 	    console.log(result);
 
+		var clientId = getClientSocketFromPhone(phone);
+
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
 			console.log(`A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 
-			var clientId = getClientSocketFromPhone(phone);
-
 			if(clientId)
-			    socket.to(clientId).send(JSON.stringify({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
+			    socket.to(clientId).emit('Call Progress', JSON.stringify({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
 
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    } else {
-		    req.io.send(JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
+			if(clientId)
+		    socket.to(clientId).emit("Call Progress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
 		}
 
 	    //split cost by decimal for twilio voice to correctly articulate
