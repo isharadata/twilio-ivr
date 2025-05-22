@@ -40,12 +40,18 @@ clientSockets = [];
 
 function getClientSocketFromPhone(phone) {
 	for (const key in clientSockets) {
-	    if (clientSockets.hasOwnProperty(key) && clientSockets[key] === phone) {
+	    if (clientSockets.hasOwnProperty(key) && clientSockets[value] === phone) {
 	      return key;
 	    }
 	  }
 
 	return undefined;
+}
+
+function setClientSocketToPhone(socketId, phone) {
+	clientSockets[socketId] = phone;
+
+	console.log(clientSockets);
 }
 
 var con = mysql.createConnection({
@@ -139,7 +145,9 @@ server.use(function(req, res, next) {
 io.on('connection', function(socket) {
 	var clientId = socket.id;
 
-	clientSockets[socket.id] = '';
+//	clientSockets[socket.id] = '';
+
+	setClientSocketToPhone(clientId, '');
 
     console.log(`Client connected: ${clientId}`);
 
@@ -149,11 +157,14 @@ io.on('connection', function(socket) {
 
     	console.log(`Message from ${clientId}: ${data}`);
 		
-		clientSockets[clientId] = customerPhone;
+		//clientSockets[clientId] = customerPhone;
+
+		setClientSocketToPhone(clientId, phone);
   });
 
   socket.on('disconnect', () => {
     delete clientSockets[clientId];
+
     console.log(`Client disconnected: ${clientId}`);
   });
 });
@@ -767,8 +778,11 @@ server.post("/twilio-flow-events", (req,res) =>{
 
 		console.log(`clientId=${clientId} 'type':'Call Progress', 'data': ${phone}: Call started`)
     } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
-		if (clientId)
+		if (clientId) {
 			socket.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
+
+	    	socketClients[clientId] = '';
+		}
         
 		console.log(`clientId=${clientId} {'type':'Call Progress', 'data': ${phone}: Call ended`);
 
