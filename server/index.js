@@ -425,14 +425,14 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
 			console.log(`clientId=${clientId}: A call is already in progress for ${result[0].name} - ${result[0].phone}`);
 
 			if(clientId)
-			    req.io.to(clientId).emit('Call Progress', JSON.stringify({'type':'Call Progress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
+			    req.io.to(clientId).emit('callProgress', JSON.stringify({'type':'callProgress', 'data': `A call is already in progress for ${result[0].name} - ${result[0].phone}`}));
 
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    } else {
 			if(clientId)
-			    req.io.to(clientId).emit("Call Progress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
+			    req.io.to(clientId).emit("callProgress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
 
-			console.log(`clientId=${clientId}: "Call Progress", JSON.stringify({'type':'callProgress', 'data': Initiating a call for ${result[0].name} - ${result[0].phone}})`);
+			console.log(`clientId=${clientId}: "callProgress", JSON.stringify({'type':'callProgress', 'data': Initiating a call for ${result[0].name} - ${result[0].phone}})`);
 		}
 
 	    //split cost by decimal for twilio voice to correctly articulate
@@ -790,17 +790,17 @@ server.post("/twilio-flow-events", (req,res) =>{
 
     if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.started') {
 		if (clientId)
-			req.io.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call started`}));
+			req.io.to(clientId).emit(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call started`}));
 
-		console.log(`clientId=${clientId} 'type':'Call Progress', 'data': ${phone}: Call started`)
+		console.log(`clientId=${clientId} 'type':'callProgress', 'data': ${phone}: Call started`)
     } else if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.ended') {
 		if (clientId) {
-			req.io.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call ended`}));
+			req.io.to(clientId).emit(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call ended`}));
 
 	    	setClientSocketToPhone(clientId, '');
 		}
         
-		console.log(`clientId=${clientId} 'type':'Call Progress', 'data': ${phone}: Call ended`);
+		console.log(`clientId=${clientId} 'type':'callProgress', 'data': ${phone}: Call ended`);
 
 		//rename the recording
 		const sql = `UPDATE customers SET callInProgress = false WHERE phone = ?`;
@@ -814,15 +814,15 @@ server.post("/twilio-flow-events", (req,res) =>{
 		});
     } else if (phone){ //only if phone is defined
 		if (clientId)
-			req.io.to(clientId).emit(JSON.stringify({'type':'Call Progress', 'data': `${phone}: Call in progress`}));
+			req.io.to(clientId).emit(JSON.stringify({'type':'callProgress', 'data': `${phone}: Call in progress`}));
 
-		console.log(`clientId=${clientId} 'type':'Call Progress', 'data': ${phone}: Call in progress`);
+		console.log(`clientId=${clientId} 'type':'callProgress', 'data': ${phone}: Call in progress`);
     } else {
         var transitioned_from = req.body[0].data.transitioned_from;
 		var transitioned_to = req.body[0].data.transitioned_to;
         var name = req.body[0].data.name;
 		var execution_sid = req.body[0].data.execution_sid;
-		console.log(`{'type':'Call Progress', 'data': ${execution_sid}:: ${transitioned_from} => ${transitioned_to}: ${name}}`);
+		console.log(`{'type':'callProgress', 'data': ${execution_sid}:: ${transitioned_from} => ${transitioned_to}: ${name}}`);
 	}
   } catch (err) {
     console.log(err);

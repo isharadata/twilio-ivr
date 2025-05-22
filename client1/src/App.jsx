@@ -113,7 +113,7 @@ function HomePage() {
     const [error, setError] = useState(null);
 
 	const [socketConnected, setSockConnected] = useState(socket.connected);
-	const [fooEvents, setFooEvents] = useState([]);
+	const [messageEvents, setMessageEvents] = useState([]);
 
   useEffect(() => {
     function onConnect() {
@@ -124,18 +124,18 @@ function HomePage() {
       setSockConnected(false);
     }
 
-    function onFooEvent(value) {
-      setFooEvents(previous => [...previous, value]);
+    function onMessageEvent(value) {
+      setMessageEvents(previous => [...previous, value]);
     }
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
-    socket.on('foo', onFooEvent);
+    socket.on('message', onMessageEvent);
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
-      socket.off('foo', onFooEvent);
+      socket.off('foo', onMessageEvent);
     };
   }, []);
 

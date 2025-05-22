@@ -23,7 +23,7 @@ socket.on("connect", () => {
   console.log(`calldialog connected: ${socket.id}`);
 });
 
-socket.on("message", data => {
+socket.on("callProgress", data => {
   let parsedResponse = JSON.parse(data);
   let parsedData = parsedResponse.data;
   let eventType = parsedResponse.type;
