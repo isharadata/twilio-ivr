@@ -397,10 +397,10 @@ server.delete("/delete/:index", (req,res) =>{
 })
 
 server.get("/call/:index/:clientSocketId", (req,res) =>{
-	console.log(`calling: ${req.params}`);
 
-    const { index } = parseInt(req.params.index, 10);
-	const { clientSocketId } = req.params.clientSocketId;
+    const { index , clientSocketId } = req.params;
+
+	console.log(`calling: ${index}`);
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
@@ -411,7 +411,7 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
             console.log(err);
         }else{
 
-		console.log(`sql = ${sql}`);
+		console.log(`sql = ${sql} index`);
 
 	    console.log(`result = ${result}`);
 
