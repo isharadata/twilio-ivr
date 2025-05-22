@@ -404,7 +404,8 @@ server.get("/call/:index", (req,res) =>{
 	    } else {
 			if(clientId)
 			    socket.to(clientId).emit("Call Progress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
-			console.log(`clientId=${clientId}: "Call Progress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
+
+			console.log(`clientId=${clientId}: "Call Progress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}})`);
 		}
 
 	    //split cost by decimal for twilio voice to correctly articulate
