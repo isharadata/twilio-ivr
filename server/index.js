@@ -405,6 +405,8 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
+	var clientId = clientSocketId;
+
     let sql = "SELECT * FROM customers WHERE id = ?"
 
     db.query(sql, [index], (err,result) =>{
@@ -416,10 +418,6 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
 
 	    console.log(`result = ${result}`);
 
-		setClientSocketToPhone(clientSocketId, result[0].phone);
-
-		var clientId = getClientSocketFromPhone(result[0].phone);
-
 	    //if there's already a call in progress
 	    if (result[0].callInProgress) {
 			console.log(`clientId=${clientId}: A call is already in progress for ${result[0].name} - ${result[0].phone}`);
@@ -429,6 +427,8 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
 
 		    return `A call is already in progress for ${result[0].name} - ${result[0].phone}`;
 	    } else {
+			setClientSocketToPhone(clientId, result[0].phone);
+
 			if(clientId)
 			    req.io.to(clientId).emit("callProgress", JSON.stringify({'type':'callProgress', 'data':`Initiating a call for ${result[0].name} - ${result[0].phone}`}));
 
