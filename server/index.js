@@ -757,7 +757,7 @@ server.post("/twilio-flow-events", (req,res) =>{
 
     const phone = req.body[0].data.contact_channel_address;
 
-	var clientId = getClientSocketFromPhone(result[0].phone);
+	var clientId = getClientSocketFromPhone(phone);
 
     if (phone && req.body[0].type == 'com.twilio.studio.flow.execution.started') {
 		if (clientId)
