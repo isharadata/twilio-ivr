@@ -393,7 +393,7 @@ server.get("/call/:index/:clientSocketId", (req,res) =>{
 	console.log(req.params);
 
     const { index } = req.params.index;
-	const { clientId } = req.params.clientId;
+	const { clientId } = req.params.clientSocketId;
 
     const client = require('twilio')(twAccountSid, twAuthToken);
 
