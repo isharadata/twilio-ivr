@@ -28,7 +28,7 @@ socket.on("message", data => {
   let parsedData = parsedResponse.data;
   let eventType = parsedResponse.type;
 
-  console.log(`${eventType}: JSON.stringify(${parsedData})`);
+  console.log(`Message received: ${eventType}: JSON.stringify(${parsedData})`);
 
   let flowParentDiv = document.querySelector('.MuiDialogContent-root');
   renderEvent(flowParentDiv, eventType, parsedData);
